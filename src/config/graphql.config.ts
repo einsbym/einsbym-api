@@ -1,9 +1,13 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { env } from './env.config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
-export const graphqlConfig = <ApolloDriverConfig>{
-    useGlobalPrefix: env('SERVER_ROUTE_PREFIX', { defaultValue: '/' }) != '/',
-    playground: env('SERVER_PLAYGROUND_ENABLED', { defaultValue: 'false' }) == 'true',
+export const graphqlAsyncConfig = <ApolloDriverConfig>{
     driver: ApolloDriver,
-    autoSchemaFile: true,
+    imports: [ConfigModule],
+    useFactory: async (configService: ConfigService) => ({
+        useGlobalPrefix: configService.get<boolean>('graphql.useGlobalPrefix'),
+        playground: configService.get<boolean>('graphql.playground'),
+        autoSchemaFile: configService.get<boolean>('graphql.autoSchemaFile'),
+    }),
+    inject: [ConfigService]
 };

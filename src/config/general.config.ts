@@ -1,4 +1,5 @@
-import { ConfigProps } from "src/interfaces/config.interface";
+import { ApolloDriver } from '@nestjs/apollo';
+import { ConfigProps } from 'src/interfaces/config.interface';
 
 export const config = (): ConfigProps => ({
     port: parseInt(process.env.SERVER_PORT, 10) || 4000,
@@ -15,5 +16,9 @@ export const config = (): ConfigProps => ({
             password: process.env.DB_PASSWORD,
             database: process.env.DB_NAME,
         },
+    },
+    graphql: {
+        autoSchemaFile: true,
+        playground: true,
     },
 });

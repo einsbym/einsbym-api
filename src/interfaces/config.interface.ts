@@ -12,10 +12,16 @@ interface PostgresConfigProps {
     database: string;
 }
 
+interface GqlConfigProps {
+    playground: boolean;
+    autoSchemaFile: boolean;
+}
+
 export interface ConfigProps {
     port: number;
     api: ApiConfigProps;
     postgres: {
         database: PostgresConfigProps;
     };
+    graphql: GqlConfigProps;
 }
