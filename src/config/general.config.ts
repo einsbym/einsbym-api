@@ -1,4 +1,3 @@
-import { ApolloDriver } from '@nestjs/apollo';
 import { ConfigProps } from 'src/interfaces/config.interface';
 
 export const config = (): ConfigProps => ({
