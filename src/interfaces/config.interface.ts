@@ -10,6 +10,7 @@ interface PostgresConfigProps {
     username: string;
     password: string;
     database: string;
+    synchronize: boolean;
 }
 
 interface GqlConfigProps {

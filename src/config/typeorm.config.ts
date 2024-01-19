@@ -10,6 +10,8 @@ export const typeOrmAsyncConfig = <TypeOrmModuleAsyncOptions>{
         username: configService.get<string>('postgres.database.username'),
         password: configService.get<string>('postgres.database.password'),
         database: configService.get<string>('postgres.database.database'),
+        synchronize: configService.get<boolean>('postgres.database.synchronize'),
+        logging: ['info', 'query'],
     }),
     inject: [ConfigService],
 };
