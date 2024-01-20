@@ -1,7 +1,38 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
+@Entity()
 @ObjectType()
 export class Image {
-    @Field(() => Int, { description: 'Example field (placeholder)' })
-    exampleField: number;
+    @PrimaryGeneratedColumn('uuid')
+    @Field(() => ID)
+    id: string;
+
+    @Column()
+    @Field(() => String)
+    name: string;
+
+    @Column()
+    @Field(() => String)
+    description: string;
+
+    @Column({ type: 'jsonb' })
+    @Field(() => [String])
+    tags: string[];
+
+    @Column({ nullable: true, default: 0 })
+    @Field(() => Int, { nullable: true })
+    likes?: number;
+
+    @Column({ nullable: true, default: 0 })
+    @Field(() => Int, { nullable: true })
+    views?: number;
+
+    @CreateDateColumn({ name: 'created_at' })
+    @Field(() => Date)
+    createdAt: number;
+
+    @UpdateDateColumn({ name: 'updated_at' })
+    @Field(() => Date)
+    updatedAt: number;
 }
