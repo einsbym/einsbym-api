@@ -19,6 +19,10 @@ export class Image {
 
     @Column()
     @Field(() => String)
+    url: string;
+
+    @Column()
+    @Field(() => String)
     name: string;
 
     @Column()

@@ -13,14 +13,14 @@ export class ImageService {
         private readonly imageRepository: Repository<Image>,
 
         @InjectRepository(User)
-        private readonly userRepository: Repository<User>
+        private readonly userRepository: Repository<User>,
     ) {}
 
     async create(createImageInput: CreateImageInput) {
         const image = this.imageRepository.create(createImageInput);
 
         // Get user
-        const user = await this.userRepository.findOneBy({id: createImageInput.userId})
+        const user = await this.userRepository.findOneBy({ id: createImageInput.userId });
 
         // Bind image to user
         image.user = user;
@@ -28,8 +28,8 @@ export class ImageService {
         return await this.imageRepository.save(image);
     }
 
-    findAll() {
-        return `This action returns all image`;
+    async findAll() {
+        return await this.imageRepository.find();
     }
 
     findOne(id: number) {

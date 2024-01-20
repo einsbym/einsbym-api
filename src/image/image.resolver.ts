@@ -14,12 +14,12 @@ export class ImageResolver {
     }
 
     @Query(() => [Image])
-    findAll() {
+    images() {
         return this.imageService.findAll();
     }
 
     @Query(() => String)
-    findOne(@Args('id', { type: () => Int }) id: number) {
+    findImage(@Args('id', { type: () => Int }) id: number) {
         return this.imageService.findOne(id);
     }
 
