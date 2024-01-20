@@ -7,6 +7,7 @@ import { graphqlAsyncConfig } from './config/graphql.config';
 import { typeOrmAsyncConfig } from './config/typeorm.config';
 import { ImageModule } from './image/image.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
     imports: [
@@ -18,6 +19,7 @@ import { UserModule } from './user/user.module';
         GraphQLModule.forRootAsync(graphqlAsyncConfig),
         ImageModule,
         UserModule,
+        AuthModule,
     ],
 })
 export class AppModule {}
