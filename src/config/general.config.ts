@@ -5,6 +5,7 @@ export const config = (): ConfigProps => ({
     api: {
         apiUrl: '',
         httpTimeout: 1000,
+        jwtSecret: process.env.JWT_SECRET
     },
     postgres: {
         database: {

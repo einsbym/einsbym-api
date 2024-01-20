@@ -1,6 +1,7 @@
 interface ApiConfigProps {
     apiUrl: string;
     httpTimeout: number;
+    jwtSecret: string
 }
 
 interface PostgresConfigProps {
