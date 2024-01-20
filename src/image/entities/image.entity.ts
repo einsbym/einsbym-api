@@ -19,7 +19,7 @@ export class Image {
 
     @Column()
     @Field(() => String)
-    url: string;
+    filename: string;
 
     @Column()
     @Field(() => String)
