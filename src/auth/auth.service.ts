@@ -16,10 +16,11 @@ export class AuthService {
         }
 
         const { password, ...userWithoutPassword } = user;
-        const payload = { sub: user.id, user: userWithoutPassword };
+        const payload = { sub: user.id };
 
         return {
-            access_token: await this.jwtService.signAsync(payload),
+            accessToken: await this.jwtService.signAsync(payload),
+            user: userWithoutPassword
         };
     }
 }

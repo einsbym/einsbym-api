@@ -26,7 +26,6 @@ export class User {
     email: string;
 
     @Column()
-    @Field(() => String)
     password: string;
 
     @Column({ nullable: true })
