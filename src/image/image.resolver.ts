@@ -18,8 +18,8 @@ export class ImageResolver {
         return this.imageService.findAll();
     }
 
-    @Query(() => String)
-    findImage(@Args('id', { type: () => Int }) id: number) {
+    @Query(() => Image)
+    findImage(@Args('id', { type: () => String }) id: string) {
         return this.imageService.findOne(id);
     }
 
