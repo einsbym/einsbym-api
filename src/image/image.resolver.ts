@@ -29,7 +29,7 @@ export class ImageResolver {
     }
 
     @Mutation(() => Image)
-    removeImage(@Args('id', { type: () => Int }) id: number) {
+    removeImage(@Args('id', { type: () => String }) id: string) {
         return this.imageService.remove(id);
     }
 }
