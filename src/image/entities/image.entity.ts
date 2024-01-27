@@ -9,6 +9,7 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
+import { Post } from '../../post/entities/post.entity';
 
 @Entity()
 @ObjectType()
@@ -53,4 +54,7 @@ export class Image {
     @UpdateDateColumn({ name: 'updated_at' })
     @Field(() => Date)
     updatedAt: number;
+
+    @ManyToOne(() => Post, (post) => post.images)
+    post: Post;
 }
