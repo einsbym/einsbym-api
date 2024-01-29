@@ -18,13 +18,6 @@ export class ImageService {
 
     async create(createImageInput: CreateImageInput) {
         const image = this.imageRepository.create(createImageInput);
-
-        // Get user
-        const user = await this.userRepository.findOneBy({ id: createImageInput.userId });
-
-        // Bind image to user
-        image.user = user;
-
         return await this.imageRepository.save(image);
     }
 
@@ -33,7 +26,7 @@ export class ImageService {
     }
 
     async findOne(id: string) {
-        const image = await this.imageRepository.findOne({ where: { id: id }, relations: { user: true } });
+        const image = await this.imageRepository.findOne({ where: { id: id } });
 
         if (!image) {
             throw new NotFoundException('Image not found');

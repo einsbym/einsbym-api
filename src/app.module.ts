@@ -8,6 +8,7 @@ import { typeOrmAsyncConfig } from './config/typeorm.config';
 import { ImageModule } from './image/image.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { PostModule } from './post/post.module';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { AuthModule } from './auth/auth.module';
         ImageModule,
         UserModule,
         AuthModule,
+        PostModule,
     ],
 })
 export class AppModule {}

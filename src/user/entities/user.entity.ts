@@ -1,6 +1,5 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Post } from 'src/post/entities/post.entity';
-import { Image } from 'src/image/entities/image.entity';
 
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
@@ -38,9 +37,8 @@ export class User {
     @Field(() => String, { nullable: true })
     profilePicture?: string;
 
-    @OneToMany(() => Image, (image) => image.user)
-    @Field(() => [Image], { nullable: true })
-    images: Image[];
+    @OneToMany(() => Post, (post) => post.user)
+    posts: Post[];
 
     @CreateDateColumn({ name: 'created_at' })
     @Field(() => Date)
@@ -49,7 +47,4 @@ export class User {
     @UpdateDateColumn({ name: 'updated_at' })
     @Field(() => Date)
     updatedAt: number;
-
-    @OneToMany(() => Post, (post) => post.user)
-    posts: Post[];
 }

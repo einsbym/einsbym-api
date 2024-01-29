@@ -42,11 +42,6 @@ export class Image {
     @Field(() => Int, { nullable: true })
     views?: number;
 
-    @ManyToOne(() => User, (user) => user.images)
-    @JoinColumn({ name: 'user_id' })
-    @Field(() => User)
-    user: User;
-
     @CreateDateColumn({ name: 'created_at' })
     @Field(() => Date)
     createdAt: number;
@@ -56,5 +51,6 @@ export class Image {
     updatedAt: number;
 
     @ManyToOne(() => Post, (post) => post.images)
+    @JoinColumn({ name: 'post_id' })
     post: Post;
 }
