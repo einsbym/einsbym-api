@@ -26,4 +26,7 @@ export class CreateUserInput {
 
   @Field(() => String, { nullable: true })
   profilePicture?: string;
+
+  @Field(() => String, { nullable: true })
+  coverImage?: string;
 }

@@ -37,6 +37,10 @@ export class User {
     @Field(() => String, { nullable: true })
     profilePicture?: string;
 
+    @Column({ name: 'cover_image', nullable: true })
+    @Field(() => String, { nullable: true })
+    coverImage?: string;
+
     @OneToMany(() => Post, (post) => post.user)
     posts: Post[];
 
