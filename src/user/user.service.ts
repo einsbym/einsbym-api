@@ -1,10 +1,12 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { UpdateCoverImageInput } from './dto/update-cover-image.input';
+import { UpdateProfilePictureInput } from './dto/update-profile-picture.input';
 
 @Injectable()
 export class UserService {
@@ -29,6 +31,34 @@ export class UserService {
         user.password = hash;
 
         return await this.userRepository.save(user);
+    }
+
+    async updateProfilePicture(updateProfilePictureInput: UpdateProfilePictureInput) {
+        const user = await this.userRepository.findOne({ where: { id: updateProfilePictureInput.id } });
+
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        await this.userRepository.update(updateProfilePictureInput.id, {
+            profilePicture: updateProfilePictureInput.profilePicture,
+        });
+
+        return this.userRepository.create({ ...user, ...updateProfilePictureInput });
+    }
+
+    async updateCoverImage(updateCoverImageInput: UpdateCoverImageInput) {
+        const user = await this.userRepository.findOne({ where: { id: updateCoverImageInput.id } });
+
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        await this.userRepository.update(updateCoverImageInput.id, {
+            coverImage: updateCoverImageInput.coverImage,
+        });
+
+        return this.userRepository.create({ ...user, ...updateCoverImageInput });
     }
 
     findAll() {
