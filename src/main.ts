@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
-import { otelSDK } from './tracing';
+import { otelSDK } from './config/tracing.config';
 
 async function bootstrap() {
     await otelSDK.start();

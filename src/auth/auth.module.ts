@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthService } from './auth.service';
-import { AuthResolver } from './auth.resolver';
-import { UserService } from 'src/user/user.service';
+import { AuthService } from '../auth/auth.service';
+import { UserService } from 'src/providers/user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/user/entities/user.entity';
-import { JwtStrategy } from './jwt.strategy';
+import { JwtStrategy } from '../auth/jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UserModule } from 'src/modules/user.module';
+import { User } from 'src/entities/user.entity';
+import { AuthResolver } from './auth.resolver';
 
 @Module({
     imports: [
@@ -19,7 +19,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
                 signOptions: { expiresIn: '30m' },
                 global: true,
             }),
-            inject: [ConfigService]
+            inject: [ConfigService],
         }),
         TypeOrmModule.forFeature([User]),
     ],

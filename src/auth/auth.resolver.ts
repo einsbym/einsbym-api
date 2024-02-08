@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Args, ObjectType, Field } from '@nestjs/graphql';
-import { AuthService } from './auth.service';
-import { SigninInput } from './dto/signin.input';
-import { User } from 'src/user/entities/user.entity';
+import { AuthService } from '../auth/auth.service';
+import { SigninInput } from '../auth/dto/signin.input';
+import { User } from 'src/entities/user.entity';
 
 @ObjectType()
 export class Auth {

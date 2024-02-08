@@ -1,10 +1,5 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
-import { Comment } from 'src/comment/entities/comment.entity';
-import { Image } from 'src/image/entities/image.entity';
-import { Post } from 'src/post/entities/post.entity';
-import { Response } from 'src/response/entities/response.entity';
-import { User } from 'src/user/entities/user.entity';
 
 export const typeOrmAsyncConfig = <TypeOrmModuleAsyncOptions>{
     imports: [ConfigModule],
@@ -16,7 +11,7 @@ export const typeOrmAsyncConfig = <TypeOrmModuleAsyncOptions>{
         password: configService.get<string>('postgres.database.password'),
         database: configService.get<string>('postgres.database.database'),
         synchronize: configService.get<boolean>('postgres.database.synchronize'),
-        entities: [User, Image, Post, Comment, Response],
+        entities: ['dist/**/*.entity.js'],
         logging: ['info', 'query'],
     }),
     inject: [ConfigService],

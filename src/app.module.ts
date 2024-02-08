@@ -5,10 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { config } from './config/general.config';
 import { graphqlAsyncConfig } from './config/graphql.config';
 import { typeOrmAsyncConfig } from './config/typeorm.config';
-import { ImageModule } from './image/image.module';
-import { UserModule } from './user/user.module';
+import { ImageModule } from './modules/image.module';
+import { UserModule } from './modules/user.module';
+import { PostModule } from './modules/post.module';
 import { AuthModule } from './auth/auth.module';
-import { PostModule } from './post/post.module';
 
 @Module({
     imports: [
