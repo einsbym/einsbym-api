@@ -18,11 +18,11 @@ export class User {
     @Field(() => String, { nullable: true })
     lastName?: string;
 
-    @Column()
+    @Column({ unique: true })
     @Field(() => String)
     username: string;
 
-    @Column()
+    @Column({ unique: true })
     @Field(() => String)
     email: string;
 

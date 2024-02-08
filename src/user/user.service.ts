@@ -19,9 +19,16 @@ export class UserService {
         const user = this.userRepository.create(createUserInput);
 
         // Check if a user with the same email already exists
-        const existingUserWithUsername = await this.userRepository.findOneBy({ username: user.username });
-        if (existingUserWithUsername) {
-            throw new ConflictException('Já existe um usuário com este e-mail cadastrado');
+        const existingUser = await this.userRepository.findOne({
+            where: [{ username: user.username }, { email: user.email }],
+        });
+
+        if (existingUser) {
+            if (existingUser.username === user.username) {
+                throw new ConflictException('Já existe um usuário com este username cadastrado');
+            } else {
+                throw new ConflictException('Já existe um usuário com este e-mail cadastrado');
+            }
         }
 
         // Hash the password
