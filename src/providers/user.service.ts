@@ -72,8 +72,14 @@ export class UserService {
         return `This action returns all user`;
     }
 
-    findOne(id: string) {
-        return this.userRepository.findOne({ where: { id: id } });
+    async findOne(id: string) {
+        const user = await this.userRepository.findOne({ where: { id: id } });
+
+        if (!user) {
+            throw new NotFoundException('Usuário não encontrado');
+        }
+
+        return user;
     }
 
     findOneByEmail(email: string) {
