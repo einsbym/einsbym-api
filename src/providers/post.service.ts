@@ -17,15 +17,15 @@ export class PostService {
 
     async create(createPostInput: CreatePostInput) {
         const post = this.postRepository.create(createPostInput);
-
         const user = await this.userRepository.findOne({ where: { id: createPostInput.userId } });
+        
         post.user = user;
 
         if (!user) {
             throw new NotFoundException('User not found');
-        } else {
-            return await this.postRepository.save(post);
         }
+
+        return await this.postRepository.save(post);
     }
 
     findAll() {
