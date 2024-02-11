@@ -11,8 +11,8 @@ export class Post {
     @Field(() => ID)
     id: string;
 
-    @Field(() => String)
     @Column({ name: 'post_text', type: 'text', nullable: true })
+    @Field(() => String)
     postText: string;
 
     @OneToMany(() => Image, (image) => image.post, { cascade: true })
@@ -20,6 +20,7 @@ export class Post {
 
     @ManyToOne(() => User, (user) => user.posts)
     @JoinColumn({ name: 'user_id' })
+    @Field(() => User)
     user: User;
 
     @OneToMany(() => Comment, (comment) => comment.post)
