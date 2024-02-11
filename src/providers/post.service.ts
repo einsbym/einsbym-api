@@ -13,27 +13,27 @@ export class PostService {
         private readonly userRepository: Repository<User>,
         @InjectRepository(Post)
         private readonly postRepository: Repository<Post>,
-    ) { }
+    ) {}
 
     async create(createPostInput: CreatePostInput) {
         const post = this.postRepository.create(createPostInput);
-
         const user = await this.userRepository.findOne({ where: { id: createPostInput.userId } });
+
         post.user = user;
 
         if (!user) {
             throw new NotFoundException('User not found');
-        } else {
-            return await this.postRepository.save(post);
         }
+
+        return await this.postRepository.save(post);
     }
 
-    findAll() {
-        return `This action returns all post`;
+    async findByUser(userId: string) {
+        return await this.postRepository.find({ where: { user: { id: userId } }, relations: { user: true } });
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} post`;
+    async findById(id: string) {
+        return await this.postRepository.findOne({ where: { id: id }, relations: { user: true } });
     }
 
     update(id: number, updatePostInput: UpdatePostInput) {
