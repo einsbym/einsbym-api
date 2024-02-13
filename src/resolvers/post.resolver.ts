@@ -14,12 +14,12 @@ export class PostResolver {
     }
 
     @Query(() => [Post])
-    findAll(@Args('userId', { type: () => String }) userId: string) {
+    findPostsByUser(@Args('userId', { type: () => String }) userId: string) {
         return this.postService.findByUser(userId);
     }
 
     @Query(() => Post)
-    findById(@Args('id', { type: () => String }) id: string) {
+    findPostByUser(@Args('id', { type: () => String }) id: string) {
         return this.postService.findById(id);
     }
 

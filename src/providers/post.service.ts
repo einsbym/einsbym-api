@@ -29,11 +29,19 @@ export class PostService {
     }
 
     async findByUser(userId: string) {
-        return await this.postRepository.find({ where: { user: { id: userId } }, relations: { user: true } });
+        return await this.postRepository.find({
+            where: { user: { id: userId } },
+            relations: { user: true },
+            order: { createdAt: 'DESC' },
+        });
     }
 
     async findById(id: string) {
-        return await this.postRepository.findOne({ where: { id: id }, relations: { user: true } });
+        return await this.postRepository.findOne({
+            where: { id: id },
+            relations: { user: true },
+            order: { createdAt: 'DESC' },
+        });
     }
 
     update(id: number, updatePostInput: UpdatePostInput) {
