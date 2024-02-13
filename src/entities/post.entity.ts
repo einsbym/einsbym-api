@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Image } from './image.entity';
 import { User } from './user.entity';
@@ -25,4 +25,12 @@ export class Post {
 
     @OneToMany(() => Comment, (comment) => comment.post)
     comments: Comment[];
+
+    @CreateDateColumn({ name: 'created_at' })
+    @Field(() => Date)
+    createdAt: number;
+
+    @UpdateDateColumn({ name: 'updated_at' })
+    @Field(() => Date)
+    updatedAt: number;
 }
