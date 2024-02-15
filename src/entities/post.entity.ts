@@ -16,6 +16,7 @@ export class Post {
     postText: string;
 
     @OneToMany(() => Image, (image) => image.post, { cascade: true })
+    @Field(() => [Image])
     images: Image[];
 
     @ManyToOne(() => User, (user) => user.posts)

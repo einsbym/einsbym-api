@@ -5,10 +5,10 @@ import { CreateImageInput } from './create-image.input';
 export class CreatePostInput {
   @Field(() => String)
   userId: string;
+  
+  @Field(() => String)
+  postText: string;
 
   @Field(() => [CreateImageInput], { nullable: true })
   images: CreateImageInput[];
-
-  @Field(() => String)
-  postText: string;
 }

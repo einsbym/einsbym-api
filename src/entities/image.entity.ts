@@ -33,14 +33,6 @@ export class Image {
     @Field(() => [String])
     tags: string[];
 
-    @Column({ nullable: true, default: 0 })
-    @Field(() => Int, { nullable: true })
-    likes?: number;
-
-    @Column({ nullable: true, default: 0 })
-    @Field(() => Int, { nullable: true })
-    views?: number;
-
     @CreateDateColumn({ name: 'created_at' })
     @Field(() => Date)
     createdAt: number;

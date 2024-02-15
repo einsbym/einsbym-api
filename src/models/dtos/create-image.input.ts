@@ -13,7 +13,4 @@ export class CreateImageInput {
 
   @Field(() => [String])
   tags: string[];
-
-  @Field(() => ID)
-  userId: string;
 }
