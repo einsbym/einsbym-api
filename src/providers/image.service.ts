@@ -21,6 +21,16 @@ export class ImageService {
         return await this.imageRepository.find();
     }
 
+    async findAllByUser(userId: string) {
+        const queryBuilder = this.imageRepository
+            .createQueryBuilder('i')
+            .select(['i.id', 'i.filename'])
+            .innerJoin('post', 'p', 'i.post_id = p.id')
+            .where('p.user_id = :userId', { userId });
+
+        return await queryBuilder.getMany();
+    }
+
     async findOne(id: string) {
         const image = await this.imageRepository.findOne({ where: { id: id } });
 

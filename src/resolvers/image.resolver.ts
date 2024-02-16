@@ -18,6 +18,11 @@ export class ImageResolver {
         return this.imageService.findAll();
     }
 
+    @Query(() => [Image])
+    findImagesByUser(@Args('userId', { type: () => String }) userId: string) {
+        return this.imageService.findAllByUser(userId);
+    }
+
     @Query(() => Image)
     findImage(@Args('id', { type: () => String }) id: string) {
         return this.imageService.findOne(id);
