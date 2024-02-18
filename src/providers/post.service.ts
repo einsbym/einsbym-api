@@ -31,7 +31,7 @@ export class PostService {
     async findByUser(userId: string) {
         return await this.postRepository.find({
             where: { user: { id: userId } },
-            relations: { user: true },
+            relations: { user: true, images: true },
             order: { createdAt: 'DESC' },
         });
     }
@@ -39,7 +39,7 @@ export class PostService {
     async findById(id: string) {
         return await this.postRepository.findOne({
             where: { id: id },
-            relations: { user: true },
+            relations: { user: true, images: true },
             order: { createdAt: 'DESC' },
         });
     }

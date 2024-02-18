@@ -21,6 +21,16 @@ export class ImageService {
         return await this.imageRepository.find();
     }
 
+    async findAllByUser(userId: string) {
+        const queryBuilder = this.imageRepository
+            .createQueryBuilder('i')
+            .select(['i.id', 'i.filename'])
+            .innerJoin('post', 'p', 'i.post_id = p.id')
+            .where('p.user_id = :userId', { userId });
+
+        return await queryBuilder.getMany();
+    }
+
     async findOne(id: string) {
         const image = await this.imageRepository.findOne({ where: { id: id } });
 
@@ -38,10 +48,10 @@ export class ImageService {
     async remove(id: string) {
         const image = await this.imageRepository.findOne({ where: { id: id } });
 
-        if (image) {
-            return await this.imageRepository.remove(image);
-        } else {
+        if (!image) {
             throw new NotFoundException('Image not found');
         }
+
+        return await this.imageRepository.remove(image);
     }
 }
