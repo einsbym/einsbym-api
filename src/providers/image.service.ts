@@ -48,10 +48,10 @@ export class ImageService {
     async remove(id: string) {
         const image = await this.imageRepository.findOne({ where: { id: id } });
 
-        if (image) {
-            return await this.imageRepository.remove(image);
-        } else {
+        if (!image) {
             throw new NotFoundException('Image not found');
         }
+
+        return await this.imageRepository.remove(image);
     }
 }
