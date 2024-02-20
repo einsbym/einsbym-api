@@ -5,6 +5,7 @@ import { CreateUserInput } from 'src/models/dtos/create-user.input';
 import { UpdateCoverImageInput } from 'src/models/dtos/update-cover-image.input';
 import { UpdateProfilePictureInput } from 'src/models/dtos/update-profile-picture.input';
 import { UpdateUserInput } from 'src/models/dtos/update-user.input';
+import { UpdateBioInput } from 'src/models/dtos/update-bio.input';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -23,6 +24,11 @@ export class UserResolver {
     @Mutation(() => User)
     updateCoverImage(@Args('updateCoverImageInput') updateCoverImageInput: UpdateCoverImageInput) {
         return this.userService.updateCoverImage(updateCoverImageInput);
+    }
+
+    @Mutation(() => User)
+    updateBio(@Args('updateBioInput') updateBioInput: UpdateBioInput) {
+        return this.userService.updateBio(updateBioInput);
     }
 
     @Query(() => [User], { name: 'user' })
