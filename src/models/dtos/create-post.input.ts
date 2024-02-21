@@ -3,12 +3,12 @@ import { CreateImageInput } from './create-image.input';
 
 @InputType()
 export class CreatePostInput {
-  @Field(() => String)
-  userId: string;
-  
-  @Field(() => String)
-  postText: string;
+    @Field(() => String)
+    userId: string;
 
-  @Field(() => [CreateImageInput], { nullable: true })
-  images: CreateImageInput[];
+    @Field(() => String, { nullable: true })
+    postText: string;
+
+    @Field(() => [CreateImageInput], { nullable: true })
+    images: CreateImageInput[];
 }
