@@ -1,4 +1,13 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Image } from './image.entity';
 import { User } from './user.entity';
@@ -12,7 +21,7 @@ export class Post {
     id: string;
 
     @Column({ name: 'post_text', type: 'text', nullable: true })
-    @Field(() => String)
+    @Field(() => String, { nullable: true })
     postText: string;
 
     @OneToMany(() => Image, (image) => image.post, { cascade: true })

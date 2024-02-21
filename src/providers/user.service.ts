@@ -7,6 +7,7 @@ import { CreateUserInput } from 'src/models/dtos/create-user.input';
 import { UpdateCoverImageInput } from 'src/models/dtos/update-cover-image.input';
 import { UpdateProfilePictureInput } from 'src/models/dtos/update-profile-picture.input';
 import { UpdateUserInput } from 'src/models/dtos/update-user.input';
+import { UpdateBioInput } from 'src/models/dtos/update-bio.input';
 
 @Injectable()
 export class UserService {
@@ -66,6 +67,20 @@ export class UserService {
         });
 
         return this.userRepository.create({ ...user, ...updateCoverImageInput });
+    }
+
+    async updateBio(updateBioInput: UpdateBioInput) {
+        const user = await this.userRepository.findOne({ where: { id: updateBioInput.userId } });
+
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        await this.userRepository.update(updateBioInput.userId, {
+            bio: updateBioInput.bio,
+        });
+
+        return this.userRepository.create({ ...user, ...updateBioInput });
     }
 
     findAll() {
