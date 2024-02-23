@@ -14,8 +14,14 @@ export class ImageResolver {
     }
 
     @Query(() => [Image])
-    images() {
-        return this.imageService.findAll();
+    images(
+        @Args('page', { type: () => Int, nullable: true }) page: number = 1,
+        @Args('limit', { type: () => Int, nullable: true }) limit: number = 8,
+    ) {
+        // Calculate the number of posts to skip based on the page and limit parameters
+        const skip = (page - 1) * limit;
+        
+        return this.imageService.findAll(skip, limit);
     }
 
     @Query(() => [Image])

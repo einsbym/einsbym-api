@@ -17,13 +17,14 @@ export class ImageService {
         return await this.imageRepository.save(image);
     }
 
-    async findAll() {
+    async findAll(skip: number, take: number) {
         const queryBuilder = this.imageRepository
             .createQueryBuilder('i')
             .select(['i.id', 'i.filename'])
             .innerJoin('post', 'p', 'i.post_id = p.id')
-            .orderBy('p.created_at', 'DESC')
-            .limit(8);
+            .offset(skip)
+            .limit(take)
+            .orderBy('p.created_at', 'DESC');
 
         return await queryBuilder.getMany();
     }
