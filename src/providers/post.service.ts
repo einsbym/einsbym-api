@@ -33,6 +33,7 @@ export class PostService {
             where: { user: { id: userId } },
             relations: { user: true, images: true },
             order: { createdAt: 'DESC' },
+            take: 10,
         });
     }
 

@@ -18,16 +18,24 @@ export class ImageService {
     }
 
     async findAll() {
-        return await this.imageRepository.find({ order: { post: { createdAt: 'DESC' } } });
+        const queryBuilder = this.imageRepository
+            .createQueryBuilder('i')
+            .select(['i.id', 'i.filename'])
+            .innerJoin('post', 'p', 'i.post_id = p.id')
+            .orderBy('p.created_at', 'DESC')
+            .limit(8);
+
+        return await queryBuilder.getMany();
     }
 
-    async findAllByUser(userId: string) {
+    async findByUser(userId: string) {
         const queryBuilder = this.imageRepository
             .createQueryBuilder('i')
             .select(['i.id', 'i.filename'])
             .innerJoin('post', 'p', 'i.post_id = p.id')
             .where('p.user_id = :userId', { userId })
-            .orderBy('p.created_at', 'DESC');
+            .orderBy('p.created_at', 'DESC')
+            .limit(9);
 
         return await queryBuilder.getMany();
     }

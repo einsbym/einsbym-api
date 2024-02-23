@@ -20,7 +20,7 @@ export class ImageResolver {
 
     @Query(() => [Image])
     findImagesByUser(@Args('userId', { type: () => String }) userId: string) {
-        return this.imageService.findAllByUser(userId);
+        return this.imageService.findByUser(userId);
     }
 
     @Query(() => Image)
