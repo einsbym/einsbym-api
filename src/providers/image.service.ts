@@ -20,11 +20,11 @@ export class ImageService {
     async findAll(skip: number, take: number) {
         const queryBuilder = this.imageRepository
             .createQueryBuilder('i')
-            .select(['i.id', 'i.filename'])
-            .innerJoin('post', 'p', 'i.post_id = p.id')
-            .offset(skip)
-            .limit(take)
-            .orderBy('p.created_at', 'DESC');
+            .select(['i.id', 'i.filename', 'p.id', 'p.createdAt'])
+            .leftJoin('post', 'p', 'i.post = p.id')
+            .orderBy('p.createdAt', 'DESC')
+            .skip(skip)
+            .take(take);
 
         return await queryBuilder.getMany();
     }
