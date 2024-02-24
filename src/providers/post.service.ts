@@ -28,13 +28,30 @@ export class PostService {
         return await this.postRepository.save(post);
     }
 
-    async findByUser(userId: string) {
-        return await this.postRepository.find({
-            where: { user: { id: userId } },
-            relations: { user: true, images: true },
-            order: { createdAt: 'DESC' },
-            take: 10,
-        });
+    async findByUser(userId: string, skip: number, take: number) {
+        const queryBuilder = this.postRepository
+            .createQueryBuilder('p')
+            .select([
+                'p.id',
+                'p.postText',
+                'p.createdAt',
+                'p.updatedAt',
+                'i.id',
+                'i.filename',
+                'u.id',
+                'u.firstName',
+                'u.lastName',
+                'u.username',
+                'u.profilePicture',
+            ])
+            .leftJoin('p.images', 'i')
+            .leftJoin('p.user', 'u')
+            .where('u.id = :userId', { userId })
+            .orderBy('p.createdAt', 'DESC')
+            .skip(skip)
+            .take(take);
+
+        return await queryBuilder.getMany();
     }
 
     async findById(id: string) {
