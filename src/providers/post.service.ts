@@ -55,11 +55,7 @@ export class PostService {
     }
 
     async findById(id: string) {
-        return await this.postRepository.findOne({
-            where: { id: id },
-            relations: { user: true, images: true },
-            order: { createdAt: 'DESC' },
-        });
+        return await this.postRepository.findOneBy({ id: id });
     }
 
     update(id: number, updatePostInput: UpdatePostInput) {

@@ -87,7 +87,7 @@ export class UserService {
         return `This action returns all user`;
     }
 
-    async findOne(id: string) {
+    async findById(id: string) {
         const user = await this.userRepository.findOne({ where: { id: id } });
 
         if (!user) {

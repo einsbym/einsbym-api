@@ -1,6 +1,6 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
-
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { PostComment } from './comment.entity';
 import { Post } from './post.entity';
 
 @Entity()
@@ -43,6 +43,9 @@ export class User {
 
     @OneToMany(() => Post, (post) => post.user)
     posts: Post[];
+
+    @OneToMany(() => PostComment, (comment) => comment.user)
+    comments: PostComment[];
 
     @CreateDateColumn({ name: 'created_at' })
     @Field(() => Date)

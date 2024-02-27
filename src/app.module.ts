@@ -9,6 +9,7 @@ import { ImageModule } from './modules/image.module';
 import { UserModule } from './modules/user.module';
 import { PostModule } from './modules/post.module';
 import { AuthModule } from './auth/auth.module';
+import { CommentModule } from './modules/comment.module';
 
 @Module({
     imports: [
@@ -22,6 +23,7 @@ import { AuthModule } from './auth/auth.module';
         UserModule,
         AuthModule,
         PostModule,
+        CommentModule,
     ],
 })
 export class AppModule {}

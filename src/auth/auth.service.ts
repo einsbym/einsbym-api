@@ -25,7 +25,7 @@ export class AuthService {
     }
 
     async getUser(id: string) {
-        const user = await this.usersService.findOne(id);
+        const user = await this.usersService.findById(id);
 
         if (!user) {
             throw new NotFoundException('Usuário não encontrado');

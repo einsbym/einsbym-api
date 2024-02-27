@@ -8,5 +8,6 @@ import { PostResolver } from 'src/resolvers/post.resolver';
 @Module({
     imports: [TypeOrmModule.forFeature([Post, User])],
     providers: [PostResolver, PostService],
+    exports: [PostService]
 })
 export class PostModule {}
