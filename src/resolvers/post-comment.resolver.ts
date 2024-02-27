@@ -1,11 +1,11 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { PostCommentService } from '../providers/comment.service';
-import { CreatePostCommentInput } from '../models/dtos/create-comment.input';
-import { UpdateCommentInput } from '../models/dtos/update-comment.input';
-import { PostComment } from 'src/entities/comment.entity';
+import { PostCommentService } from '../providers/post-comment.service';
+import { CreatePostCommentInput } from '../models/dtos/create-post-comment.input';
+import { UpdateCommentInput } from '../models/dtos/update-post-comment.input';
+import { PostComment } from 'src/entities/post-comment.entity';
 
 @Resolver(() => PostComment)
-export class CommentResolver {
+export class PostCommentResolver {
     constructor(private readonly commentService: PostCommentService) {}
 
     @Mutation(() => PostComment)

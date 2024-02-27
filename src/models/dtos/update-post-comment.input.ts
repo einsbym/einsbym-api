@@ -1,4 +1,4 @@
-import { CreatePostCommentInput } from './create-comment.input';
+import { CreatePostCommentInput } from './create-post-comment.input';
 import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
 
 @InputType()

@@ -11,7 +11,7 @@ import {
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Image } from './image.entity';
 import { User } from './user.entity';
-import { PostComment } from './comment.entity';
+import { PostComment } from './post-comment.entity';
 
 @Entity()
 @ObjectType()

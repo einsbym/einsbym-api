@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { PostComment } from './comment.entity';
+import { PostComment } from './post-comment.entity';
 import { Post } from './post.entity';
 
 @Entity()
