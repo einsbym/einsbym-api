@@ -32,8 +32,12 @@ export class PostCommentService {
         return `This action returns all comment`;
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} comment`;
+    async findByPost(postId: string): Promise<PostComment[]> {
+        return await this.postCommentRepository.find({
+            where: { post: { id: postId } },
+            relations: { user: true },
+            order: { createdAt: 'DESC' },
+        });
     }
 
     update(id: number, updateCommentInput: UpdateCommentInput) {

@@ -9,14 +9,14 @@ export class PostCommentResolver {
     constructor(private readonly commentService: PostCommentService) {}
 
     @Mutation(() => PostComment)
-    createComment(@Args('createCommentInput') createCommentInput: CreatePostCommentInput) {
+    createComment(@Args('createCommentInput') createCommentInput: CreatePostCommentInput): Promise<PostComment> {
         return this.commentService.create(createCommentInput);
     }
 
-    // @Query(() => [Comment], { name: 'comment' })
-    // findAll() {
-    //     return this.commentService.findAll();
-    // }
+    @Query(() => [PostComment])
+    findCommentsByPost(@Args('postId') postId: string): Promise<PostComment[]> {
+        return this.commentService.findByPost(postId);
+    }
 
     // @Query(() => Comment, { name: 'comment' })
     // findOne(@Args('id', { type: () => Int }) id: number) {
