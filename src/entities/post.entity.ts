@@ -8,7 +8,7 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { Image } from './image.entity';
 import { User } from './user.entity';
 import { PostComment } from './post-comment.entity';
@@ -35,6 +35,9 @@ export class Post {
 
     @OneToMany(() => PostComment, (comment) => comment.post)
     comments: PostComment[];
+
+    @Field(() => Int)
+    totalComments: number;
 
     @CreateDateColumn({ name: 'created_at' })
     @Field(() => Date)

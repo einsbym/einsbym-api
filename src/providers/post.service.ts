@@ -44,6 +44,7 @@ export class PostService {
                 'u.username',
                 'u.profilePicture',
             ])
+            .loadRelationCountAndMap('p.totalComments', 'p.comments')
             .leftJoin('p.images', 'i')
             .leftJoin('p.user', 'u')
             .where('u.id = :userId', { userId })
