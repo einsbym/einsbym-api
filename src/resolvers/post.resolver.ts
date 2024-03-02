@@ -3,16 +3,20 @@ import { PostService } from '../providers/post.service';
 import { CreatePostInput } from '../models/dtos/create-post.input';
 import { UpdatePostInput } from '../models/dtos/update-post.input';
 import { Post } from 'src/entities/post.entity';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 
 @Resolver(() => Post)
 export class PostResolver {
     constructor(private readonly postService: PostService) {}
 
+    @UseGuards(JwtAuthGuard)
     @Mutation(() => Post)
     createPost(@Args('createPostInput') createPostInput: CreatePostInput) {
         return this.postService.create(createPostInput);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Query(() => [Post])
     findPostsByUser(
         @Args('userId', { type: () => String }) userId: string,
@@ -25,16 +29,19 @@ export class PostResolver {
         return this.postService.findByUser(userId, skip, limit);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Query(() => Post)
     findPostByUser(@Args('id', { type: () => String }) id: string) {
         return this.postService.findById(id);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Mutation(() => Post)
     updatePost(@Args('updatePostInput') updatePostInput: UpdatePostInput) {
         return this.postService.update(updatePostInput.id, updatePostInput);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Mutation(() => Post)
     removePost(@Args('id', { type: () => Int }) id: number) {
         return this.postService.remove(id);

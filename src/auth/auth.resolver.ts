@@ -2,6 +2,8 @@ import { Resolver, Mutation, Args, ObjectType, Field, Query } from '@nestjs/grap
 import { AuthService } from '../auth/auth.service';
 import { SigninInput } from '../auth/dto/signin.input';
 import { User } from 'src/entities/user.entity';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from './auth.guard';
 
 @ObjectType()
 export class Auth {
@@ -21,6 +23,7 @@ export class AuthResolver {
         return this.authService.signIn(signinInput);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Query(() => User)
     me(@Args('id') id: string) {
         return this.authService.getUser(id);
