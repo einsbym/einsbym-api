@@ -3,6 +3,8 @@ import {
     CreateDateColumn,
     Entity,
     JoinColumn,
+    JoinTable,
+    ManyToMany,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
@@ -35,6 +37,20 @@ export class Post {
 
     @OneToMany(() => PostComment, (comment) => comment.post)
     comments: PostComment[];
+
+    @ManyToMany(() => User)
+    @JoinTable({
+        name: 'post_like', // Name of the intermediate table
+        joinColumn: {
+            name: 'post_id',
+            referencedColumnName: 'id',
+        },
+        inverseJoinColumn: {
+            name: 'user_id',
+            referencedColumnName: 'id',
+        },
+    })
+    likes: User[];
 
     @Field(() => Int)
     totalComments: number;

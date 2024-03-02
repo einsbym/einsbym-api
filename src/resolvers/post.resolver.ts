@@ -30,6 +30,18 @@ export class PostResolver {
     }
 
     @UseGuards(JwtAuthGuard)
+    @Mutation(() => String)
+    likePost(@Args('postId') postId: string, @Args('userId') userId: string) {
+        return this.postService.likePost(postId, userId);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Mutation(() => String)
+    unlikePost(@Args('postId') postId: string, @Args('userId') userId: string) {
+        return this.postService.unlikePost(postId, userId);
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Query(() => Post)
     findPostByUser(@Args('id', { type: () => String }) id: string) {
         return this.postService.findById(id);
