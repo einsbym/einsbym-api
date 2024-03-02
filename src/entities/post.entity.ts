@@ -50,10 +50,14 @@ export class Post {
             referencedColumnName: 'id',
         },
     })
+    @Field(() => [User])
     likes: User[];
 
     @Field(() => Int)
     totalComments: number;
+
+    @Field(() => Int)
+    totalLikes: number;
 
     @CreateDateColumn({ name: 'created_at' })
     @Field(() => Date)

@@ -43,10 +43,14 @@ export class PostService {
                 'u.lastName',
                 'u.username',
                 'u.profilePicture',
+                'l.id',
+                'l.username',
             ])
             .loadRelationCountAndMap('p.totalComments', 'p.comments')
+            .loadRelationCountAndMap('p.totalLikes', 'p.likes')
             .leftJoin('p.images', 'i')
             .leftJoin('p.user', 'u')
+            .leftJoin('p.likes', 'l')
             .where('u.id = :userId', { userId })
             .orderBy('p.createdAt', 'DESC')
             .skip(skip)
@@ -74,7 +78,7 @@ export class PostService {
 
     async unlikePost(postId: string, userId: string): Promise<string> {
         const post = await this.postRepository.findOne({ where: { id: postId }, relations: { likes: true } });
-        
+
         if (!post) {
             throw new NotFoundException('Post not found');
         }
