@@ -16,7 +16,7 @@ import { AuthResolver } from './auth.resolver';
             imports: [ConfigModule],
             useFactory: async (configService: ConfigService) => ({
                 secret: configService.get<string>('api.jwtSecret'),
-                signOptions: { expiresIn: '30m' },
+                signOptions: { expiresIn: '2 days' },
                 global: true,
             }),
             inject: [ConfigService],
