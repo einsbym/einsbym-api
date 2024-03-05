@@ -1,13 +1,5 @@
 import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
-import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Post } from './post.entity';
 
 @Entity()
@@ -21,7 +13,7 @@ export class Image {
     @Field(() => String)
     filename: string;
 
-    @ManyToOne(() => Post, (post) => post.images)
+    @ManyToOne(() => Post, (post) => post.images, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'post_id' })
     post: Post;
 }
