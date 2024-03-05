@@ -1,19 +1,25 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreatePostInput } from '../models/dtos/create-post.input';
 import { UpdatePostInput } from '../models/dtos/update-post.input';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from 'src/entities/post.entity';
 import { User } from 'src/entities/user.entity';
+import { StorageClientService } from './storage-client.service';
 
 @Injectable()
 export class PostService {
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
+
         @InjectRepository(Post)
         private readonly postRepository: Repository<Post>,
+
+        private readonly storageClientService: StorageClientService,
     ) {}
+
+    private readonly logger = new Logger(PostService.name);
 
     async create(createPostInput: CreatePostInput) {
         const post = this.postRepository.create(createPostInput);
@@ -96,7 +102,23 @@ export class PostService {
         return `This action updates a #${id} post`;
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} post`;
+    async remove(id: string) {
+        const post = await this.postRepository.findOne({ where: { id: id }, relations: { images: true } });
+
+        if (post) {
+            for (const image of post.images) {
+                try {
+                    await this.storageClientService.removeFromStorage(image.filename);
+                } catch (error) {
+                    this.logger.error(`Error while removing image ${image.id}`, error);
+                }
+            }
+        } else {
+            throw new NotFoundException('Post not found');
+        }
+
+        await this.postRepository.remove(post);
+
+        return { message: 'post deleted successfully' };
     }
 }

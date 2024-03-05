@@ -5,6 +5,7 @@ import { UpdatePostInput } from '../models/dtos/update-post.input';
 import { Post } from 'src/entities/post.entity';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { Message } from 'src/models/dtos/message.dto';
 
 @Resolver(() => Post)
 export class PostResolver {
@@ -54,8 +55,8 @@ export class PostResolver {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Mutation(() => Post)
-    removePost(@Args('id', { type: () => Int }) id: number) {
+    @Mutation(() => Message)
+    removePost(@Args('id', { type: () => String }) id: string) {
         return this.postService.remove(id);
     }
 }
