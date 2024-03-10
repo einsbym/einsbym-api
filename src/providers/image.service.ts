@@ -51,8 +51,6 @@ export class ImageService {
             .limit(1)
             .getOne();
 
-        console.log(image);
-
         return image;
     }
 
