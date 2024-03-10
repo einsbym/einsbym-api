@@ -9,5 +9,5 @@ export const graphqlAsyncConfig = <ApolloDriverConfig>{
         playground: configService.get<boolean>('graphql.playground'),
         autoSchemaFile: configService.get<boolean>('graphql.autoSchemaFile'),
     }),
-    inject: [ConfigService]
+    inject: [ConfigService],
 };

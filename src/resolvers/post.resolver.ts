@@ -21,8 +21,8 @@ export class PostResolver {
     @Query(() => [Post])
     findPostsByUser(
         @Args('userId', { type: () => String }) userId: string,
-        @Args('page', { type: () => Int, nullable: true }) page: number = 1,
-        @Args('limit', { type: () => Int, nullable: true }) limit: number = 5,
+        @Args('page', { type: () => Int, nullable: true }) page = 1,
+        @Args('limit', { type: () => Int, nullable: true }) limit = 5,
     ) {
         // Calculate the number of posts to skip based on the page and limit parameters
         const skip = (page - 1) * limit;

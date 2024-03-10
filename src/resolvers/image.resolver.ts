@@ -19,12 +19,12 @@ export class ImageResolver {
     @UseGuards(JwtAuthGuard)
     @Query(() => [Image])
     images(
-        @Args('page', { type: () => Int, nullable: true }) page: number = 1,
-        @Args('limit', { type: () => Int, nullable: true }) limit: number = 8,
+        @Args('page', { type: () => Int, nullable: true }) page = 1,
+        @Args('limit', { type: () => Int, nullable: true }) limit = 8,
     ) {
         // Calculate the number of posts to skip based on the page and limit parameters
         const skip = (page - 1) * limit;
-        
+
         return this.imageService.findAll(skip, limit);
     }
 
