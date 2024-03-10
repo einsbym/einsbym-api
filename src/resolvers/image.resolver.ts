@@ -34,7 +34,6 @@ export class ImageResolver {
         return this.imageService.findByUser(userId);
     }
 
-    @UseGuards(JwtAuthGuard)
     @Query(() => Image)
     findRandomImage() {
         return this.imageService.findRandom();
