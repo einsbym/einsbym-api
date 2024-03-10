@@ -6,7 +6,10 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-    constructor(private usersService: UserService, private jwtService: JwtService) {}
+    constructor(
+        private usersService: UserService,
+        private jwtService: JwtService,
+    ) {}
 
     async signIn(signinInput: SigninInput) {
         const user = await this.usersService.findOneByEmail(signinInput.email);
@@ -31,6 +34,8 @@ export class AuthService {
             throw new NotFoundException('Usuário não encontrado');
         }
 
-        return user;
+        const { password, ...userWithoutPassword } = user;
+
+        return userWithoutPassword;
     }
 }

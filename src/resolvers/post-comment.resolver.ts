@@ -1,10 +1,9 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { PostCommentService } from '../providers/post-comment.service';
-import { CreatePostCommentInput } from '../models/dtos/create-post-comment.input';
-import { UpdateCommentInput } from '../models/dtos/update-post-comment.input';
-import { PostComment } from 'src/entities/post-comment.entity';
 import { UseGuards } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { PostComment } from 'src/entities/post-comment.entity';
+import { CreatePostCommentInput } from '../models/dtos/create-post-comment.input';
+import { PostCommentService } from '../providers/post-comment.service';
 
 @Resolver(() => PostComment)
 export class PostCommentResolver {
@@ -21,19 +20,4 @@ export class PostCommentResolver {
     findCommentsByPost(@Args('postId') postId: string): Promise<PostComment[]> {
         return this.commentService.findByPost(postId);
     }
-
-    // @Query(() => Comment, { name: 'comment' })
-    // findOne(@Args('id', { type: () => Int }) id: number) {
-    //     return this.commentService.findOne(id);
-    // }
-
-    // @Mutation(() => Comment)
-    // updateComment(@Args('updateCommentInput') updateCommentInput: UpdateCommentInput) {
-    //     return this.commentService.update(updateCommentInput.id, updateCommentInput);
-    // }
-
-    // @Mutation(() => Comment)
-    // removeComment(@Args('id', { type: () => Int }) id: number) {
-    //     return this.commentService.remove(id);
-    // }
 }
