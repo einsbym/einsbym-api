@@ -8,7 +8,7 @@ export class StorageClientService {
 
     private readonly logger = new Logger(StorageClientService.name);
 
-    async removeFromStorage(imageId: string) {
+    async remove(imageId: string) {
         try {
             const url = `${this.configService.get('EINSBYM_STORAGE')}/delete/${imageId}`;
             const response = await axios.delete(url);

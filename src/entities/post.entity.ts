@@ -61,9 +61,9 @@ export class Post {
 
     @CreateDateColumn({ name: 'created_at' })
     @Field(() => Date)
-    createdAt: number;
+    createdAt: Date;
 
     @UpdateDateColumn({ name: 'updated_at' })
     @Field(() => Date)
-    updatedAt: number;
+    updatedAt: Date;
 }

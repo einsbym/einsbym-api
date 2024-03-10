@@ -111,7 +111,7 @@ export class PostService {
 
         for (const image of post.images) {
             try {
-                await this.storageClientService.removeFromStorage(image.filename);
+                await this.storageClientService.remove(image.filename);
             } catch (error) {
                 this.logger.error(`Error while removing image ${image.id}`, error);
             }
