@@ -36,8 +36,8 @@ export class ImageResolver {
 
     @UseGuards(JwtAuthGuard)
     @Query(() => Image)
-    findImage(@Args('id', { type: () => String }) id: string) {
-        return this.imageService.findOne(id);
+    findRandomImage() {
+        return this.imageService.findRandom();
     }
 
     @UseGuards(JwtAuthGuard)

@@ -41,12 +41,17 @@ export class ImageService {
         return await queryBuilder.getMany();
     }
 
-    async findOne(id: string) {
-        const image = await this.imageRepository.findOne({ where: { id: id } });
+    async findRandom() {
+        const image = await this.imageRepository
+            .createQueryBuilder('i')
+            .select(['i.id', 'i.filename', 'p.id', 'u.id', 'u.username', 'u.profilePicture'])
+            .leftJoin('i.post', 'p')
+            .leftJoin('p.user', 'u')
+            .orderBy('RANDOM()')
+            .limit(1)
+            .getOne();
 
-        if (!image) {
-            throw new NotFoundException('Image not found');
-        }
+        console.log(image);
 
         return image;
     }
