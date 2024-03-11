@@ -15,7 +15,7 @@ export class StorageClientService {
 
             return response.data;
         } catch (error) {
-            this.logger.error('error when deleting image from Minio', error);
+            this.logger.error('error when deleting image from storage', error);
         }
     }
 }
