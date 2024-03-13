@@ -15,7 +15,6 @@ interface PostgresConfigProps {
 }
 
 interface GqlConfigProps {
-    playground: boolean;
     autoSchemaFile: boolean;
 }
 

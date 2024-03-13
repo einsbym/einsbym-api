@@ -20,6 +20,5 @@ export const config = (): ConfigProps => ({
     },
     graphql: {
         autoSchemaFile: true,
-        playground: process.env.SERVER_PLAYGROUND_ENABLED === 'true' ? true : false,
     },
 });

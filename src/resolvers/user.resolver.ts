@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
 import { UserService } from '../providers/user.service';
 import { User } from 'src/entities/user.entity';
 import { CreateUserInput } from 'src/models/dtos/create-user.input';
@@ -44,8 +44,8 @@ export class UserResolver {
 
     @UseGuards(JwtAuthGuard)
     @Query(() => User)
-    findUserById(@Args('id', { type: () => Int }) id: string) {
-        return this.userService.findById(id);
+    findUserById(@Args('userId', { type: () => ID }) userId: string) {
+        return this.userService.findById(userId);
     }
 
     @UseGuards(JwtAuthGuard)
