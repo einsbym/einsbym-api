@@ -25,11 +25,7 @@ export class UserService {
         });
 
         if (existingUser) {
-            if (existingUser.username === user.username) {
-                throw new ConflictException('Já existe um usuário com este username cadastrado');
-            } else {
-                throw new ConflictException('Já existe um usuário com este e-mail cadastrado');
-            }
+            throw new ConflictException('🖐️ Hey, there is already a user with the same username or email address.');
         }
 
         // Hash the password
