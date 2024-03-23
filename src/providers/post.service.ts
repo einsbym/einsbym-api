@@ -42,8 +42,8 @@ export class PostService {
                 'p.postText',
                 'p.createdAt',
                 'p.updatedAt',
-                'i.id',
-                'i.filename',
+                'f.id',
+                'f.filename',
                 'u.id',
                 'u.firstName',
                 'u.lastName',
@@ -54,7 +54,7 @@ export class PostService {
             ])
             .loadRelationCountAndMap('p.totalComments', 'p.comments')
             .loadRelationCountAndMap('p.totalLikes', 'p.likes')
-            .leftJoin('p.images', 'i')
+            .leftJoin('p.files', 'f')
             .leftJoin('p.user', 'u')
             .leftJoin('p.likes', 'l')
             .where('u.id = :userId', { userId })
