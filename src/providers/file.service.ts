@@ -46,6 +46,7 @@ export class FileService {
             .select(['f.id', 'f.filename', 'f.fileType', 'p.id', 'u.id', 'u.username', 'u.profilePicture'])
             .leftJoin('f.post', 'p')
             .leftJoin('p.user', 'u')
+            .where('f.fileType != :fileType', { fileType: 'video/mp4' })
             .orderBy('RANDOM()')
             .limit(1)
             .getOne();
