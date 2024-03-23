@@ -28,7 +28,7 @@ export class Post {
 
     @OneToMany(() => File, (image) => image.post, { cascade: true })
     @Field(() => [File])
-    images: File[];
+    files: File[];
 
     @ManyToOne(() => User, (user) => user.posts)
     @JoinColumn({ name: 'user_id' })

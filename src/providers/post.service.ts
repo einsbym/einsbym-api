@@ -103,17 +103,17 @@ export class PostService {
     }
 
     async remove(id: string) {
-        const post = await this.postRepository.findOne({ where: { id: id }, relations: { images: true } });
+        const post = await this.postRepository.findOne({ where: { id: id }, relations: { files: true } });
 
         if (!post) {
             throw new NotFoundException('Post not found');
         }
 
-        for (const image of post.images) {
+        for (const file of post.files) {
             try {
-                await this.storageClientService.remove(image.filename);
+                await this.storageClientService.remove(file.filename);
             } catch (error) {
-                this.logger.error(`Error while removing image ${image.id}`, error);
+                this.logger.error(`Error while removing file ${file.id}`, error);
             }
         }
 

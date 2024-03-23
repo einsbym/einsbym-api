@@ -13,7 +13,7 @@ export class File {
     @Field(() => String)
     filename: string;
 
-    @ManyToOne(() => Post, (post) => post.images, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Post, (post) => post.files, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'post_id' })
     @Field(() => Post)
     post: Post;
