@@ -4,4 +4,7 @@ import { Field, InputType } from '@nestjs/graphql';
 export class CreateFileInput {
     @Field(() => String)
     filename: string;
+
+    @Field(() => String)
+    fileType: string;
 }

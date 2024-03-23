@@ -44,6 +44,7 @@ export class PostService {
                 'p.updatedAt',
                 'f.id',
                 'f.filename',
+                'f.fileType',
                 'u.id',
                 'u.firstName',
                 'u.lastName',

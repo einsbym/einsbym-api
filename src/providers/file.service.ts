@@ -18,9 +18,9 @@ export class FileService {
 
     async findAll(skip: number, take: number) {
         const queryBuilder = this.fileRepository
-            .createQueryBuilder('i')
-            .select(['i.id', 'i.filename', 'p.id', 'p.createdAt'])
-            .leftJoin('post', 'p', 'i.post = p.id')
+            .createQueryBuilder('f')
+            .select(['f.id', 'f.filename', 'f.fileType', 'p.id', 'p.createdAt'])
+            .leftJoin('post', 'p', 'f.post = p.id')
             .orderBy('p.createdAt', 'DESC')
             .skip(skip)
             .take(take);
@@ -30,9 +30,9 @@ export class FileService {
 
     async findByUser(userId: string) {
         const queryBuilder = this.fileRepository
-            .createQueryBuilder('i')
-            .select(['i.id', 'i.filename'])
-            .innerJoin('post', 'p', 'i.post_id = p.id')
+            .createQueryBuilder('f')
+            .select(['f.id', 'f.filename', 'f.fileType'])
+            .innerJoin('post', 'p', 'f.post_id = p.id')
             .where('p.user_id = :userId', { userId })
             .orderBy('p.created_at', 'DESC')
             .limit(9);
@@ -42,9 +42,9 @@ export class FileService {
 
     async findRandom() {
         const file = await this.fileRepository
-            .createQueryBuilder('i')
-            .select(['i.id', 'i.filename', 'p.id', 'u.id', 'u.username', 'u.profilePicture'])
-            .leftJoin('i.post', 'p')
+            .createQueryBuilder('f')
+            .select(['f.id', 'f.filename', 'f.fileType', 'p.id', 'u.id', 'u.username', 'u.profilePicture'])
+            .leftJoin('f.post', 'p')
             .leftJoin('p.user', 'u')
             .orderBy('RANDOM()')
             .limit(1)
