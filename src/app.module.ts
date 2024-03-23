@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { config } from './config/general.config';
 import { graphqlAsyncConfig } from './config/graphql.config';
 import { typeOrmAsyncConfig } from './config/typeorm.config';
-import { ImageModule } from './modules/image.module';
+import { FileModule } from './modules/file.module';
 import { UserModule } from './modules/user.module';
 import { PostModule } from './modules/post.module';
 import { AuthModule } from './auth/auth.module';
@@ -19,7 +19,7 @@ import { PostCommentModule } from './modules/post-comment.module';
         }),
         TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
         GraphQLModule.forRootAsync(graphqlAsyncConfig),
-        ImageModule,
+        FileModule,
         UserModule,
         AuthModule,
         PostModule,

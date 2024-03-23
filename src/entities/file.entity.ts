@@ -4,7 +4,7 @@ import { Post } from './post.entity';
 
 @Entity()
 @ObjectType()
-export class Image {
+export class File {
     @PrimaryGeneratedColumn('uuid')
     @Field(() => ID)
     id: string;

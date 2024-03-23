@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { CreateImageInput } from './create-image.input';
+import { CreateFileInput } from './create-file.input';
 
 @InputType()
 export class CreatePostInput {
@@ -9,6 +9,6 @@ export class CreatePostInput {
     @Field(() => String, { nullable: true })
     postText: string;
 
-    @Field(() => [CreateImageInput], { nullable: true })
-    images: CreateImageInput[];
+    @Field(() => [CreateFileInput], { nullable: true })
+    images: CreateFileInput[];
 }

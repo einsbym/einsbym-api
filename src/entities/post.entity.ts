@@ -11,7 +11,7 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
-import { Image } from './image.entity';
+import { File } from './file.entity';
 import { User } from './user.entity';
 import { PostComment } from './post-comment.entity';
 
@@ -26,9 +26,9 @@ export class Post {
     @Field(() => String, { nullable: true })
     postText: string;
 
-    @OneToMany(() => Image, (image) => image.post, { cascade: true })
-    @Field(() => [Image])
-    images: Image[];
+    @OneToMany(() => File, (image) => image.post, { cascade: true })
+    @Field(() => [File])
+    images: File[];
 
     @ManyToOne(() => User, (user) => user.posts)
     @JoinColumn({ name: 'user_id' })
