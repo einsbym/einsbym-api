@@ -10,5 +10,5 @@ export class CreatePostInput {
     postText: string;
 
     @Field(() => [CreateFileInput], { nullable: true })
-    images: CreateFileInput[];
+    files: CreateFileInput[];
 }
