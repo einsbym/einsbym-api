@@ -16,11 +16,12 @@ export class FileService {
         return await this.fileRepository.save(file);
     }
 
-    async findAll(skip: number, take: number) {
+    async findAll(fileTypes: string[], skip: number, take: number) {
         const queryBuilder = this.fileRepository
             .createQueryBuilder('f')
-            .select(['f.id', 'f.filename', 'f.fileType', 'p.id', 'p.createdAt'])
+            .select(['f.id', 'f.filename', 'f.fileType', 'f.post', 'p.id', 'p.createdAt'])
             .leftJoin('post', 'p', 'f.post = p.id')
+            .where('f.fileType IN (:...fileTypes)', { fileTypes: fileTypes })
             .orderBy('p.createdAt', 'DESC')
             .skip(skip)
             .take(take);

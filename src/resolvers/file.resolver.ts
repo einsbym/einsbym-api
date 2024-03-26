@@ -18,13 +18,14 @@ export class FileResolver {
     @UseGuards(JwtAuthGuard)
     @Query(() => [File])
     files(
+        @Args('fileTypes', { type: () => [String] }) fileTypes: string[],
         @Args('page', { type: () => Int, nullable: true }) page = 1,
         @Args('limit', { type: () => Int, nullable: true }) limit = 8,
     ) {
         // Calculate the number of posts to skip based on the page and limit parameters
         const skip = (page - 1) * limit;
 
-        return this.fileService.findAll(skip, limit);
+        return this.fileService.findAll(fileTypes, skip, limit);
     }
 
     @UseGuards(JwtAuthGuard)
