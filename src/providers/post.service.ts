@@ -95,8 +95,30 @@ export class PostService {
         return (await this.postRepository.save(post)).id;
     }
 
-    async findById(id: string) {
-        return await this.postRepository.findOneBy({ id: id });
+    async findById(postId: string) {
+        const queryBuilder = this.postRepository
+            .createQueryBuilder('p')
+            .select([
+                'p.id',
+                'p.postText',
+                'p.createdAt',
+                'p.updatedAt',
+                'u.id',
+                'u.firstName',
+                'u.lastName',
+                'u.username',
+                'u.profilePicture',
+                'l.id',
+                'l.username',
+                'l.profilePicture'
+            ])
+            .loadRelationCountAndMap('p.totalComments', 'p.comments')
+            .loadRelationCountAndMap('p.totalLikes', 'p.likes')
+            .leftJoin('p.user', 'u')
+            .leftJoin('p.likes', 'l')
+            .where('p.id = :postId', { postId });
+
+        return await queryBuilder.getOne();
     }
 
     update(id: number, updatePostInput: UpdatePostInput) {

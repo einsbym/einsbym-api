@@ -19,8 +19,8 @@ export class FileService {
     async findAll(fileTypes: string[], skip: number, take: number) {
         const queryBuilder = this.fileRepository
             .createQueryBuilder('f')
-            .select(['f.id', 'f.filename', 'f.fileType', 'f.post', 'p.id', 'p.createdAt'])
-            .leftJoin('post', 'p', 'f.post = p.id')
+            .select(['f.id', 'f.filename', 'f.fileType', 'p.id', 'p.createdAt'])
+            .leftJoin('f.post', 'p')
             .where('f.fileType IN (:...fileTypes)', { fileTypes: fileTypes })
             .orderBy('p.createdAt', 'DESC')
             .skip(skip)

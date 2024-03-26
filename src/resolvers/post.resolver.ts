@@ -44,8 +44,8 @@ export class PostResolver {
 
     @UseGuards(JwtAuthGuard)
     @Query(() => Post)
-    findPostByUser(@Args('id', { type: () => String }) id: string) {
-        return this.postService.findById(id);
+    findPostById(@Args('postId') postId: string) {
+        return this.postService.findById(postId);
     }
 
     @UseGuards(JwtAuthGuard)
