@@ -10,6 +10,6 @@ async function bootstrap() {
 
     await app.listen(port);
 
-    Logger.log(`Server is running on: ${await app.getUrl()}`, 'API');
+    Logger.log(`🚀 Server is running on: ${await app.getUrl()}`, 'API');
 }
 bootstrap();

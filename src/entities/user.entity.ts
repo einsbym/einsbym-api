@@ -33,6 +33,9 @@ export class User {
     @Field(() => String, { nullable: true })
     bio?: string;
 
+    @Column({ name: 'is_private', nullable: false, default: false })
+    isPrivate?: boolean;
+
     @Column({ name: 'profile_picture', nullable: true })
     @Field(() => String, { nullable: true })
     profilePicture?: string;

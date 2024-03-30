@@ -19,9 +19,11 @@ export class FileService {
     async findAll(fileTypes: string[], skip: number, take: number) {
         const queryBuilder = this.fileRepository
             .createQueryBuilder('f')
-            .select(['f.id', 'f.filename', 'f.fileType', 'p.id', 'p.createdAt'])
+            .select(['f.id', 'f.filename', 'f.fileType', 'p.id', 'p.createdAt', 'u.id', 'u.isPrivate'])
             .leftJoin('f.post', 'p')
+            .leftJoin('p.user', 'u')
             .where('f.fileType IN (:...fileTypes)', { fileTypes: fileTypes })
+            .andWhere('u.isPrivate = false')
             .orderBy('p.createdAt', 'DESC')
             .skip(skip)
             .take(take);
@@ -44,10 +46,20 @@ export class FileService {
     async findRandom() {
         const file = await this.fileRepository
             .createQueryBuilder('f')
-            .select(['f.id', 'f.filename', 'f.fileType', 'p.id', 'u.id', 'u.username', 'u.profilePicture'])
+            .select([
+                'f.id',
+                'f.filename',
+                'f.fileType',
+                'p.id',
+                'u.id',
+                'u.username',
+                'u.profilePicture',
+                'u.isPrivate',
+            ])
             .leftJoin('f.post', 'p')
             .leftJoin('p.user', 'u')
             .where('f.fileType != :fileType', { fileType: 'video/mp4' })
+            .andWhere('u.isPrivate = false')
             .orderBy('RANDOM()')
             .limit(1)
             .getOne();
