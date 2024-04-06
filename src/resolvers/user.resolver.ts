@@ -8,6 +8,7 @@ import { UpdateUserInput } from 'src/models/dtos/update-user.input';
 import { UpdateBioInput } from 'src/models/dtos/update-bio.input';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { UserStatsView } from 'src/entities/views/user-stats.view';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -52,6 +53,11 @@ export class UserResolver {
     @Query(() => User)
     findUserByUsername(@Args('username', { type: () => String }) username: string) {
         return this.userService.findByUsername(username);
+    }
+
+    @Query(() => UserStatsView)
+    findUserStats(@Args('username', { type: () => String }) username: string) {
+        return this.userService.fetchStats(username);
     }
 
     @UseGuards(JwtAuthGuard)

@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/entities/user.entity';
 import { CreateUserInput } from 'src/models/dtos/create-user.input';
@@ -8,12 +8,16 @@ import { UpdateCoverImageInput } from 'src/models/dtos/update-cover-image.input'
 import { UpdateProfilePictureInput } from 'src/models/dtos/update-profile-picture.input';
 import { UpdateUserInput } from 'src/models/dtos/update-user.input';
 import { UpdateBioInput } from 'src/models/dtos/update-bio.input';
+import { UserStatsView } from 'src/entities/views/user-stats.view';
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
+
+        @InjectEntityManager()
+        private entityManager: EntityManager,
     ) {}
 
     async create(createUserInput: CreateUserInput) {
@@ -101,6 +105,10 @@ export class UserService {
         }
 
         return user;
+    }
+
+    async fetchStats(username: string): Promise<UserStatsView> {
+        return this.entityManager.findOne(UserStatsView, { where: { username: username } });
     }
 
     findOneByEmail(email: string) {

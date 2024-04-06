@@ -11,7 +11,7 @@ export const typeOrmAsyncConfig = <TypeOrmModuleAsyncOptions>{
         password: configService.get<string>('postgres.database.password'),
         database: configService.get<string>('postgres.database.database'),
         synchronize: configService.get<boolean>('postgres.database.synchronize'),
-        entities: ['dist/**/*.entity.js'],
+        entities: ['dist/**/*.entity.js', 'dist/**/*.view.js'],
         logging: ['info', 'query'],
     }),
     inject: [ConfigService],
