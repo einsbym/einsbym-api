@@ -55,6 +55,7 @@ export class UserResolver {
         return this.userService.findByUsername(username);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Query(() => UserStatsView)
     findUserStats(@Args('username', { type: () => String }) username: string) {
         return this.userService.fetchStats(username);
