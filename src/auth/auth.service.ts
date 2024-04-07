@@ -31,7 +31,7 @@ export class AuthService {
         const user = await this.usersService.findById(id);
 
         if (!user) {
-            throw new NotFoundException('Usuário não encontrado');
+            throw new NotFoundException('User not found');
         }
 
         const { password, ...userWithoutPassword } = user;

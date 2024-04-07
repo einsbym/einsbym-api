@@ -33,11 +33,25 @@ export class PostCommentService {
     }
 
     async findByPost(postId: string): Promise<PostComment[]> {
-        return await this.postCommentRepository.find({
-            where: { post: { id: postId } },
-            relations: { user: true },
-            order: { createdAt: 'DESC' },
-        });
+        const queryBuilder = await this.postCommentRepository
+            .createQueryBuilder('pc')
+            .select([
+                'pc.id',
+                'pc.comment',
+                'pc.createdAt',
+                'u.id',
+                'u.username',
+                'u.firstName',
+                'u.profilePicture',
+                'p.id',
+            ])
+            .leftJoin('pc.user', 'u')
+            .leftJoin('pc.post', 'p')
+            .where('p.id = :postId', { postId })
+            .orderBy('pc.createdAt', 'DESC')
+            .getMany();
+
+        return queryBuilder;
     }
 
     update(id: number, updateCommentInput: UpdateCommentInput) {
