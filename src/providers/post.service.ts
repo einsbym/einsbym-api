@@ -66,7 +66,7 @@ export class PostService {
         return await queryBuilder.getMany();
     }
 
-    async likePost(postId: string, userId: string): Promise<string> {
+    async like(postId: string, userId: string): Promise<string> {
         const post = await this.postRepository.findOne({ where: { id: postId }, relations: { likes: true } });
         const user = await this.userRepository.findOne({ where: { id: userId } });
 
@@ -83,7 +83,7 @@ export class PostService {
         return "It seems like you've liked this post already 🙃";
     }
 
-    async unlikePost(postId: string, userId: string): Promise<string> {
+    async unlike(postId: string, userId: string): Promise<string> {
         const post = await this.postRepository.findOne({ where: { id: postId }, relations: { likes: true } });
 
         if (!post) {
@@ -110,7 +110,7 @@ export class PostService {
                 'u.profilePicture',
                 'l.id',
                 'l.username',
-                'l.profilePicture'
+                'l.profilePicture',
             ])
             .loadRelationCountAndMap('p.totalComments', 'p.comments')
             .loadRelationCountAndMap('p.totalLikes', 'p.likes')
@@ -121,8 +121,16 @@ export class PostService {
         return await queryBuilder.getOne();
     }
 
-    update(id: number, updatePostInput: UpdatePostInput) {
-        return `This action updates a #${id} post`;
+    async update(updatePostInput: UpdatePostInput) {
+        const post = await this.postRepository.findOne({ where: { id: updatePostInput.postId } });
+
+        if (!post) {
+            throw new NotFoundException('Post not found');
+        }
+
+        post.postText = updatePostInput.postText;
+
+        return await this.postRepository.save(post);
     }
 
     async remove(id: string) {

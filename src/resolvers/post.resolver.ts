@@ -33,13 +33,13 @@ export class PostResolver {
     @UseGuards(JwtAuthGuard)
     @Mutation(() => String)
     likePost(@Args('postId') postId: string, @Args('userId') userId: string) {
-        return this.postService.likePost(postId, userId);
+        return this.postService.like(postId, userId);
     }
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => String)
     unlikePost(@Args('postId') postId: string, @Args('userId') userId: string) {
-        return this.postService.unlikePost(postId, userId);
+        return this.postService.unlike(postId, userId);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -51,7 +51,7 @@ export class PostResolver {
     @UseGuards(JwtAuthGuard)
     @Mutation(() => Post)
     updatePost(@Args('updatePostInput') updatePostInput: UpdatePostInput) {
-        return this.postService.update(updatePostInput.id, updatePostInput);
+        return this.postService.update(updatePostInput);
     }
 
     @UseGuards(JwtAuthGuard)
