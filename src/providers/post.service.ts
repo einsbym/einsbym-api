@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { CreatePostInput } from '../models/dtos/create-post.input';
 import { UpdatePostInput } from '../models/dtos/update-post.input';
 import { Repository } from 'typeorm';
@@ -121,11 +121,15 @@ export class PostService {
         return await queryBuilder.getOne();
     }
 
-    async update(updatePostInput: UpdatePostInput) {
-        const post = await this.postRepository.findOne({ where: { id: updatePostInput.postId } });
+    async update(request: Request, updatePostInput: UpdatePostInput) {
+        const user: User = request['user'];
+        const post = await this.postRepository.findOne({
+            where: { id: updatePostInput.postId },
+            relations: { user: true },
+        });
 
-        if (!post) {
-            throw new NotFoundException('Post not found');
+        if (post.user.id !== user.id) {
+            throw new ForbiddenException('You are not allowed to perform this action');
         }
 
         post.postText = updatePostInput.postText;
@@ -133,18 +137,19 @@ export class PostService {
         return await this.postRepository.save(post);
     }
 
-    async remove(id: string) {
-        const post = await this.postRepository.findOne({ where: { id: id }, relations: { files: true } });
+    async remove(request: Request, id: string) {
+        const user: User = request['user'];
+        const post = await this.postRepository.findOne({ where: { id: id }, relations: { files: true, user: true } });
 
-        if (!post) {
-            throw new NotFoundException('Post not found');
+        if (post.user.id !== user.id) {
+            throw new ForbiddenException('You are not allowed to perform this action');
         }
 
         for (const file of post.files) {
             try {
                 await this.storageClientService.remove(file.filename);
             } catch (error) {
-                this.logger.error(`Error while removing file ${file.id}`, error);
+                throw new InternalServerErrorException('Could not remove file from storage. Check the log for details.');
             }
         }
 

@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
 import { PostService } from '../providers/post.service';
 import { CreatePostInput } from '../models/dtos/create-post.input';
 import { UpdatePostInput } from '../models/dtos/update-post.input';
@@ -50,13 +50,13 @@ export class PostResolver {
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => Post)
-    updatePost(@Args('updatePostInput') updatePostInput: UpdatePostInput) {
-        return this.postService.update(updatePostInput);
+    updatePost(@Context() context: { req: Request }, @Args('updatePostInput') updatePostInput: UpdatePostInput) {
+        return this.postService.update(context.req, updatePostInput);
     }
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => Message)
-    removePost(@Args('id', { type: () => String }) id: string) {
-        return this.postService.remove(id);
+    removePost(@Context() context: { req: Request }, @Args('id', { type: () => String }) id: string) {
+        return this.postService.remove(context.req, id);
     }
 }
