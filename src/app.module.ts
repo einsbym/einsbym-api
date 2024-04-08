@@ -10,6 +10,8 @@ import { UserModule } from './modules/user.module';
 import { PostModule } from './modules/post.module';
 import { AuthModule } from './auth/auth.module';
 import { PostCommentModule } from './modules/post-comment.module';
+import { StorieModule } from './modules/storie.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
     imports: [
@@ -19,11 +21,13 @@ import { PostCommentModule } from './modules/post-comment.module';
         }),
         TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
         GraphQLModule.forRootAsync(graphqlAsyncConfig),
+        ScheduleModule.forRoot(),
         FileModule,
         UserModule,
         AuthModule,
         PostModule,
         PostCommentModule,
+        StorieModule,
     ],
 })
 export class AppModule {}
