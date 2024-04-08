@@ -21,15 +21,11 @@ export class PostService {
 
     private readonly logger = new Logger(PostService.name);
 
-    async create(createPostInput: CreatePostInput) {
+    async create(request: Request, createPostInput: CreatePostInput) {
+        const user: User = request['user'];
         const post = this.postRepository.create(createPostInput);
-        const user = await this.userRepository.findOne({ where: { id: createPostInput.userId } });
 
         post.user = user;
-
-        if (!user) {
-            throw new NotFoundException('User not found');
-        }
 
         return await this.postRepository.save(post);
     }

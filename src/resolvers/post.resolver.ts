@@ -13,8 +13,8 @@ export class PostResolver {
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => Post)
-    createPost(@Args('createPostInput') createPostInput: CreatePostInput) {
-        return this.postService.create(createPostInput);
+    createPost(@Context() context: { req: Request }, @Args('createPostInput') createPostInput: CreatePostInput) {
+        return this.postService.create(context.req, createPostInput);
     }
 
     @UseGuards(JwtAuthGuard)

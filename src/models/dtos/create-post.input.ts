@@ -3,9 +3,6 @@ import { CreateFileInput } from './create-file.input';
 
 @InputType()
 export class CreatePostInput {
-    @Field(() => String)
-    userId: string;
-
     @Field(() => String, { nullable: true })
     postText: string;
 
