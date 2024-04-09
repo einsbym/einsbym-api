@@ -32,14 +32,14 @@ export class PostResolver {
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => String)
-    likePost(@Args('postId') postId: string, @Args('userId') userId: string) {
-        return this.postService.like(postId, userId);
+    likePost(@Context() context: { req: Request }, @Args('postId') postId: string) {
+        return this.postService.like(context.req, postId);
     }
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => String)
-    unlikePost(@Args('postId') postId: string, @Args('userId') userId: string) {
-        return this.postService.unlike(postId, userId);
+    unlikePost(@Context() context: { req: Request }, @Args('postId') postId: string) {
+        return this.postService.unlike(context.req, postId);
     }
 
     @UseGuards(JwtAuthGuard)

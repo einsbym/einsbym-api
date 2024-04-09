@@ -62,12 +62,16 @@ export class PostService {
         return await queryBuilder.getMany();
     }
 
-    async like(postId: string, userId: string): Promise<string> {
-        const post = await this.postRepository.findOne({ where: { id: postId }, relations: { likes: true } });
-        const user = await this.userRepository.findOne({ where: { id: userId } });
+    async like(request: Request, postId: string): Promise<string> {
+        const user: User = request['user'];
+        const post = await this.postRepository.findOne({ where: { id: postId }, relations: { likes: true, user: true } });
 
-        if (!post || !user) {
-            throw new NotFoundException('Required data not found');
+        if (post.user.id !== user.id) {
+            throw new ForbiddenException('You are not allowed to perform this action');
+        }
+
+        if (!post) {
+            throw new NotFoundException('No post found');
         }
 
         if (!post.likes.some((like) => like.id === user.id)) {
@@ -79,14 +83,15 @@ export class PostService {
         return "It seems like you've liked this post already 🙃";
     }
 
-    async unlike(postId: string, userId: string): Promise<string> {
-        const post = await this.postRepository.findOne({ where: { id: postId }, relations: { likes: true } });
+    async unlike(request: Request, postId: string): Promise<string> {
+        const user: User = request['user'];
+        const post = await this.postRepository.findOne({ where: { id: postId }, relations: { likes: true, user: true } });
 
-        if (!post) {
-            throw new NotFoundException('Post not found');
+        if (post.user.id !== user.id) {
+            throw new ForbiddenException('You are not allowed to perform this action');
         }
 
-        post.likes = post.likes.filter((like) => like.id !== userId);
+        post.likes = post.likes.filter((like) => like.id !== user.id);
 
         return (await this.postRepository.save(post)).id;
     }
