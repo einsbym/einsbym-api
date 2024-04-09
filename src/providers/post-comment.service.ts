@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PostService } from './post.service';
 import { UserService } from './user.service';
 import { PostComment } from 'src/entities/post-comment.entity';
+import { User } from 'src/entities/user.entity';
 
 @Injectable()
 export class PostCommentService {
@@ -13,12 +14,11 @@ export class PostCommentService {
         @InjectRepository(PostComment)
         private readonly postCommentRepository: Repository<PostComment>,
         private readonly postService: PostService,
-        private readonly userService: UserService,
     ) {}
 
-    async create(createCommentInput: CreatePostCommentInput) {
+    async create(request: Request, createCommentInput: CreatePostCommentInput) {
+        const user: User = request['user'];
         const post = await this.postService.findById(createCommentInput.postId);
-        const user = await this.userService.findById(createCommentInput.userId);
         const comment = new PostComment();
 
         comment.comment = createCommentInput.comment;

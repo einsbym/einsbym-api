@@ -1,4 +1,10 @@
-import { ForbiddenException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import {
+    ForbiddenException,
+    Injectable,
+    InternalServerErrorException,
+    Logger,
+    NotFoundException,
+} from '@nestjs/common';
 import { CreatePostInput } from '../models/dtos/create-post.input';
 import { UpdatePostInput } from '../models/dtos/update-post.input';
 import { Repository } from 'typeorm';
@@ -10,12 +16,8 @@ import { StorageClientService } from './storage-client.service';
 @Injectable()
 export class PostService {
     constructor(
-        @InjectRepository(User)
-        private readonly userRepository: Repository<User>,
-
         @InjectRepository(Post)
         private readonly postRepository: Repository<Post>,
-
         private readonly storageClientService: StorageClientService,
     ) {}
 
@@ -64,11 +66,7 @@ export class PostService {
 
     async like(request: Request, postId: string): Promise<string> {
         const user: User = request['user'];
-        const post = await this.postRepository.findOne({ where: { id: postId }, relations: { likes: true, user: true } });
-
-        if (post.user.id !== user.id) {
-            throw new ForbiddenException('You are not allowed to perform this action');
-        }
+        const post = await this.postRepository.findOne({ where: { id: postId }, relations: { likes: true } });
 
         if (!post) {
             throw new NotFoundException('No post found');
@@ -85,11 +83,7 @@ export class PostService {
 
     async unlike(request: Request, postId: string): Promise<string> {
         const user: User = request['user'];
-        const post = await this.postRepository.findOne({ where: { id: postId }, relations: { likes: true, user: true } });
-
-        if (post.user.id !== user.id) {
-            throw new ForbiddenException('You are not allowed to perform this action');
-        }
+        const post = await this.postRepository.findOne({ where: { id: postId }, relations: { likes: true } });
 
         post.likes = post.likes.filter((like) => like.id !== user.id);
 
@@ -150,7 +144,9 @@ export class PostService {
             try {
                 await this.storageClientService.remove(file.filename);
             } catch (error) {
-                throw new InternalServerErrorException('Could not remove file from storage. Check the log for details.');
+                throw new InternalServerErrorException(
+                    'Could not remove file from storage. Check the log for details.',
+                );
             }
         }
 

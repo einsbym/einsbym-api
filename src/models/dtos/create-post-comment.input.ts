@@ -7,7 +7,4 @@ export class CreatePostCommentInput {
 
     @Field(() => String, { description: 'The ID of the post' })
     postId: string;
-
-    @Field(() => String, { description: 'The author of the comment' })
-    userId: string;
 }

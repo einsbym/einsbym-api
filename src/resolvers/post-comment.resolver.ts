@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { PostComment } from 'src/entities/post-comment.entity';
 import { CreatePostCommentInput } from '../models/dtos/create-post-comment.input';
@@ -11,8 +11,11 @@ export class PostCommentResolver {
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => PostComment)
-    createComment(@Args('createCommentInput') createCommentInput: CreatePostCommentInput): Promise<PostComment> {
-        return this.commentService.create(createCommentInput);
+    createComment(
+        @Context() context: { req: Request },
+        @Args('createCommentInput') createCommentInput: CreatePostCommentInput,
+    ): Promise<PostComment> {
+        return this.commentService.create(context.req, createCommentInput);
     }
 
     @UseGuards(JwtAuthGuard)
