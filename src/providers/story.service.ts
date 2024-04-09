@@ -31,7 +31,7 @@ export class StoryService {
 
         for (const storie of stories) {
             try {
-                await this.storageClientService.remove(storie.fileName);
+                await this.storageClientService.remove(storie.filename);
             } catch (error) {
                 throw new InternalServerErrorException(
                     'Could not remove file from storage. Check the log for details.',

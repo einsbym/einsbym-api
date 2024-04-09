@@ -9,9 +9,9 @@ export class Story {
     @Field(() => ID)
     id: string;
 
-    @Column({ nullable: true, name: 'file_name' })
+    @Column({ nullable: true, name: 'filename' })
     @Field(() => String)
-    fileName: string;
+    filename: string;
 
     @Column({ nullable: true, name: 'text' })
     @Field(() => String)
