@@ -1,21 +1,21 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Storie } from 'src/entities/storie.entity';
+import { Story } from 'src/entities/story.entity';
 import { User } from 'src/entities/user.entity';
-import { CreateStorieInput } from 'src/models/dtos/create-storie.input';
+import { CreateStoryInput } from 'src/models/dtos/create-story.input';
 import { Repository } from 'typeorm';
 import { StorageClientService } from './storage-client.service';
 
 @Injectable()
-export class StorieService {
+export class StoryService {
     constructor(
-        @InjectRepository(Storie)
-        private storieRepository: Repository<Storie>,
+        @InjectRepository(Story)
+        private storieRepository: Repository<Story>,
         private storageClientService: StorageClientService,
     ) {}
 
-    async create(request: Request, createStorieInput: CreateStorieInput) {
+    async create(request: Request, createStorieInput: CreateStoryInput) {
         const user: User = request['user'];
 
         const storie = this.storieRepository.create(createStorieInput);

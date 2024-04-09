@@ -10,7 +10,7 @@ import { UserModule } from './modules/user.module';
 import { PostModule } from './modules/post.module';
 import { AuthModule } from './auth/auth.module';
 import { PostCommentModule } from './modules/post-comment.module';
-import { StorieModule } from './modules/storie.module';
+import { StoryModule } from './modules/story.module';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
@@ -27,7 +27,7 @@ import { ScheduleModule } from '@nestjs/schedule';
         AuthModule,
         PostModule,
         PostCommentModule,
-        StorieModule,
+        StoryModule,
     ],
 })
 export class AppModule {}

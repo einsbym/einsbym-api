@@ -2,7 +2,7 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { PostComment } from './post-comment.entity';
 import { Post } from './post.entity';
-import { Storie } from './storie.entity';
+import { Story } from './story.entity';
 
 @Entity()
 @ObjectType()
@@ -45,8 +45,8 @@ export class User {
     @Field(() => String, { nullable: true })
     coverImage?: string;
 
-    @OneToMany(() => Storie, (storie) => storie.user)
-    stories: Storie[];
+    @OneToMany(() => Story, (storie) => storie.user)
+    stories: Story[];
 
     @OneToMany(() => Post, (post) => post.user)
     posts: Post[];
