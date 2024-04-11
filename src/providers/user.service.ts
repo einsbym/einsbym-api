@@ -41,42 +41,30 @@ export class UserService {
         return await this.userRepository.save(user);
     }
 
-    async updateProfilePicture(updateProfilePictureInput: UpdateProfilePictureInput) {
-        const user = await this.userRepository.findOne({ where: { id: updateProfilePictureInput.id } });
+    async updateProfilePicture(request: Request, updateProfilePictureInput: UpdateProfilePictureInput) {
+        const user: User = request['user'];
 
-        if (!user) {
-            throw new NotFoundException('User not found');
-        }
-
-        await this.userRepository.update(updateProfilePictureInput.id, {
+        await this.userRepository.update(user.id, {
             profilePicture: updateProfilePictureInput.profilePicture,
         });
 
         return this.userRepository.create({ ...user, ...updateProfilePictureInput });
     }
 
-    async updateCoverImage(updateCoverImageInput: UpdateCoverImageInput) {
-        const user = await this.userRepository.findOne({ where: { id: updateCoverImageInput.id } });
+    async updateCoverImage(request: Request, updateCoverImageInput: UpdateCoverImageInput) {
+        const user: User = request['user'];
 
-        if (!user) {
-            throw new NotFoundException('User not found');
-        }
-
-        await this.userRepository.update(updateCoverImageInput.id, {
+        await this.userRepository.update(user.id, {
             coverImage: updateCoverImageInput.coverImage,
         });
 
         return this.userRepository.create({ ...user, ...updateCoverImageInput });
     }
 
-    async updateBio(updateBioInput: UpdateBioInput) {
-        const user = await this.userRepository.findOne({ where: { id: updateBioInput.userId } });
+    async updateBio(request: Request, updateBioInput: UpdateBioInput) {
+        const user: User = request['user'];
 
-        if (!user) {
-            throw new NotFoundException('User not found');
-        }
-
-        await this.userRepository.update(updateBioInput.userId, {
+        await this.userRepository.update(user.id, {
             bio: updateBioInput.bio,
         });
 

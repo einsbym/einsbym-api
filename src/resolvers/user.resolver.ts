@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ID, Context } from '@nestjs/graphql';
 import { UserService } from '../providers/user.service';
 import { User } from 'src/entities/user.entity';
 import { CreateUserInput } from 'src/models/dtos/create-user.input';
@@ -21,25 +21,25 @@ export class UserResolver {
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => User)
-    updateProfilePicture(@Args('updateProfilePictureInput') updateProfilePictureInput: UpdateProfilePictureInput) {
-        return this.userService.updateProfilePicture(updateProfilePictureInput);
+    updateProfilePicture(@Context() context: { req: Request }, @Args('updateProfilePictureInput') updateProfilePictureInput: UpdateProfilePictureInput) {
+        return this.userService.updateProfilePicture(context.req, updateProfilePictureInput);
     }
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => User)
-    updateCoverImage(@Args('updateCoverImageInput') updateCoverImageInput: UpdateCoverImageInput) {
-        return this.userService.updateCoverImage(updateCoverImageInput);
+    updateCoverImage(@Context() context: { req: Request }, @Args('updateCoverImageInput') updateCoverImageInput: UpdateCoverImageInput) {
+        return this.userService.updateCoverImage(context.req, updateCoverImageInput);
     }
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => User)
-    updateBio(@Args('updateBioInput') updateBioInput: UpdateBioInput) {
-        return this.userService.updateBio(updateBioInput);
+    updateBio(@Context() context: { req: Request }, @Args('updateBioInput') updateBioInput: UpdateBioInput) {
+        return this.userService.updateBio(context.req, updateBioInput);
     }
 
     @UseGuards(JwtAuthGuard)
-    @Query(() => [User], { name: 'user' })
-    findAll() {
+    @Query(() => [User])
+    findAllUsers() {
         return this.userService.findAll();
     }
 

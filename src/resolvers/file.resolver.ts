@@ -38,10 +38,4 @@ export class FileResolver {
     findRandomFile() {
         return this.fileService.findRandom();
     }
-
-    @UseGuards(JwtAuthGuard)
-    @Mutation(() => File)
-    removeFile(@Args('id', { type: () => String }) id: string) {
-        return this.fileService.remove(id);
-    }
 }

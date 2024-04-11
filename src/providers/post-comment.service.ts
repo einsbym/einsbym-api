@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePostCommentInput } from '../models/dtos/create-post-comment.input';
-import { UpdateCommentInput } from '../models/dtos/update-post-comment.input';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PostService } from './post.service';
-import { UserService } from './user.service';
 import { PostComment } from 'src/entities/post-comment.entity';
 import { User } from 'src/entities/user.entity';
+import { Repository } from 'typeorm';
+import { CreatePostCommentInput } from '../models/dtos/create-post-comment.input';
+import { UpdateCommentInput } from '../models/dtos/update-post-comment.input';
+import { PostService } from './post.service';
 
 @Injectable()
 export class PostCommentService {

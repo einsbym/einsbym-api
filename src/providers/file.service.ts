@@ -66,14 +66,4 @@ export class FileService {
 
         return file;
     }
-
-    async remove(id: string) {
-        const image = await this.fileRepository.findOne({ where: { id: id } });
-
-        if (!image) {
-            throw new NotFoundException('File not found');
-        }
-
-        return await this.fileRepository.remove(image);
-    }
 }
