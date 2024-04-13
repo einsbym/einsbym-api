@@ -1,11 +1,7 @@
-import { InputType, Field } from '@nestjs/graphql';
-import { CreateFileInput } from './create-file.input';
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class CreatePostInput {
     @Field(() => String, { nullable: true })
     postText: string;
-
-    @Field(() => [CreateFileInput], { nullable: true })
-    files: CreateFileInput[];
 }

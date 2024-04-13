@@ -1,6 +1,7 @@
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
+import { CreateFileInput } from 'src/models/dtos/create-file.input';
 
 @Injectable()
 export class StorageClientService {
@@ -8,18 +9,25 @@ export class StorageClientService {
 
     private readonly logger = new Logger(StorageClientService.name);
 
-    async upload(file: Express.Multer.File) {
+    async upload(files: Array<Express.Multer.File>) {
         try {
-            const url = `${this.configService.get('EINSBYM_STORAGE')}/upload`;
-            const formData = new FormData();
-            const blob = new Blob([file.buffer], { type: file.mimetype });
-            formData.append('file', blob, file.originalname);
+            const savedFiles: any[] = [];
 
-            const response = await axios.post(url, formData);
-            return response.data;
+            for (const file of files) {
+                const url = `${this.configService.get('EINSBYM_STORAGE')}/upload`;
+                const formData = new FormData();
+                const blob = new Blob([file.buffer], { type: file.mimetype });
+
+                formData.append('file', blob, file.originalname);
+
+                const response = await axios.post(url, formData);
+
+                savedFiles.push({ filename: response.data.filename, fileType: file.mimetype });
+            }
+
+            return savedFiles;
         } catch (error) {
             this.logger.error(`Error when upload file`);
-            throw new InternalServerErrorException(`Could not upload file`);
         }
     }
 

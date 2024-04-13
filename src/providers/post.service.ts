@@ -5,12 +5,13 @@ import {
     Logger,
     NotFoundException,
 } from '@nestjs/common';
-import { CreatePostInput } from '../models/dtos/create-post.input';
-import { UpdatePostInput } from '../models/dtos/update-post.input';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { File } from 'src/entities/file.entity';
 import { Post } from 'src/entities/post.entity';
 import { User } from 'src/entities/user.entity';
+import { Repository } from 'typeorm';
+import { CreatePostInput } from '../models/dtos/create-post.input';
+import { UpdatePostInput } from '../models/dtos/update-post.input';
 import { StorageClientService } from './storage-client.service';
 
 @Injectable()
@@ -23,15 +24,21 @@ export class PostService {
 
     private readonly logger = new Logger(PostService.name);
 
-    async create(request: Request, createPostInput: CreatePostInput, file?: Express.Multer.File) {
+    async create(request: Request, createPostInput: CreatePostInput, files?: Array<Express.Multer.File>) {
         const user: User = request['user'];
         const post = this.postRepository.create(createPostInput);
 
-        if (file) {
-            this.storageClientService.upload(file);
+        let savedFiles: File[] = [];
+
+        if (files) {
+            savedFiles = await this.storageClientService.upload(files);
         }
 
         post.user = user;
+
+        if (savedFiles.length > 0) {
+            post.files = savedFiles;
+        }
 
         return await this.postRepository.save(post);
     }
