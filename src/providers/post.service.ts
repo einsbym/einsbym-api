@@ -23,9 +23,13 @@ export class PostService {
 
     private readonly logger = new Logger(PostService.name);
 
-    async create(request: Request, createPostInput: CreatePostInput) {
+    async create(request: Request, createPostInput: CreatePostInput, file?: Express.Multer.File) {
         const user: User = request['user'];
         const post = this.postRepository.create(createPostInput);
+
+        if (file) {
+            this.storageClientService.upload(file);
+        }
 
         post.user = user;
 
