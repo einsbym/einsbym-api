@@ -1,4 +1,5 @@
 import {
+    BadRequestException,
     ForbiddenException,
     Injectable,
     InternalServerErrorException,
@@ -25,6 +26,12 @@ export class PostService {
     private readonly logger = new Logger(PostService.name);
 
     async create(request: Request, createPostInput: CreatePostInput, files?: Array<Express.Multer.File>) {
+        if (!createPostInput.postText && !files) {
+            throw new BadRequestException(
+                'You need to write something or at least select a file in order to save the post',
+            );
+        }
+
         const user: User = request['user'];
         const post = this.postRepository.create(createPostInput);
 
