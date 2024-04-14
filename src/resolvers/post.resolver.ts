@@ -1,21 +1,14 @@
-import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
-import { PostService } from '../providers/post.service';
-import { CreatePostInput } from '../models/dtos/create-post.input';
-import { UpdatePostInput } from '../models/dtos/update-post.input';
-import { Post } from 'src/entities/post.entity';
 import { UseGuards } from '@nestjs/common';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { Post } from 'src/entities/post.entity';
 import { Message } from 'src/models/dtos/message.dto';
+import { UpdatePostInput } from '../models/dtos/update-post.input';
+import { PostService } from '../providers/post.service';
 
 @Resolver(() => Post)
 export class PostResolver {
     constructor(private readonly postService: PostService) {}
-
-    @UseGuards(JwtAuthGuard)
-    @Mutation(() => Post)
-    createPost(@Context() context: { req: Request }, @Args('createPostInput') createPostInput: CreatePostInput) {
-        return this.postService.create(context.req, createPostInput);
-    }
 
     @UseGuards(JwtAuthGuard)
     @Query(() => [Post])
