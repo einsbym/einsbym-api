@@ -4,14 +4,14 @@ import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { CreatePostInput } from 'src/models/dtos/create-post.input';
 import { PostService } from 'src/providers/post.service';
 
-@Controller()
+@Controller('post')
 export class PostController {
     constructor(private readonly postService: PostService) {}
 
-    @Post('/upload')
+    @Post('/create')
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(FilesInterceptor('files'))
-    async upload(
+    async create(
         @Req() request: Request,
         @Body() createPostInput?: CreatePostInput,
         @UploadedFiles() files?: Array<Express.Multer.File>,
