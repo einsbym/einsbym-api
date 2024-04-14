@@ -1,7 +1,6 @@
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import axios from 'axios';
-import { CreateFileInput } from 'src/models/dtos/create-file.input';
+import axios, { AxiosError } from 'axios';
 
 @Injectable()
 export class StorageClientService {
@@ -20,14 +19,17 @@ export class StorageClientService {
 
                 formData.append('file', blob, file.originalname);
 
-                const response = await axios.post(url, formData);
+                const response = await axios.post(url, formData).catch((error: AxiosError) => {
+                    throw new AxiosError(error.response.statusText);
+                });
 
                 savedFiles.push({ filename: response.data.filename, fileType: file.mimetype });
             }
 
             return savedFiles;
         } catch (error) {
-            this.logger.error(`Error when upload file`);
+            this.logger.error(`${error}`);
+            throw new InternalServerErrorException(error);
         }
     }
 

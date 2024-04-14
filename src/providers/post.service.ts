@@ -28,17 +28,16 @@ export class PostService {
         const user: User = request['user'];
         const post = this.postRepository.create(createPostInput);
 
-        let savedFiles: File[] = [];
+        let savedFiles: File[];
 
         if (files) {
-            savedFiles = await this.storageClientService.upload(files);
+            savedFiles = await this.storageClientService.upload(files).catch(error => {
+                throw new InternalServerErrorException(error.message); 
+            });
         }
 
         post.user = user;
-
-        if (savedFiles.length > 0) {
-            post.files = savedFiles;
-        }
+        post.files = savedFiles;
 
         return await this.postRepository.save(post);
     }
