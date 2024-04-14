@@ -25,8 +25,8 @@ export class PostService {
 
     private readonly logger = new Logger(PostService.name);
 
-    async create(request: Request, createPostInput: CreatePostInput, files?: Array<Express.Multer.File>) {
-        if (!createPostInput.postText && !files) {
+    async create(request: Request, createPostInput: CreatePostInput, files: Array<Express.Multer.File>) {
+        if (!createPostInput.postText && files.length === 0) {
             throw new BadRequestException(
                 'You need to write something or at least select a file in order to save the post',
             );
@@ -37,9 +37,9 @@ export class PostService {
 
         let savedFiles: File[];
 
-        if (files) {
-            savedFiles = await this.storageClientService.upload(files).catch(error => {
-                throw new InternalServerErrorException(error.message); 
+        if (files.length > 0) {
+            savedFiles = await this.storageClientService.upload(files).catch((error) => {
+                throw new InternalServerErrorException(error.message);
             });
         }
 
