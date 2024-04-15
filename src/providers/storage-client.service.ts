@@ -8,7 +8,7 @@ export class StorageClientService {
 
     private readonly logger = new Logger(StorageClientService.name);
 
-    async upload(files: Array<Express.Multer.File>) {
+    async uploadFiles(files: Array<Express.Multer.File>) {
         try {
             const savedFiles: any[] = [];
 

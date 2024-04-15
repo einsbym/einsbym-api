@@ -38,7 +38,7 @@ export class PostService {
         let savedFiles: File[];
 
         if (files.length > 0) {
-            savedFiles = await this.storageClientService.upload(files).catch((error) => {
+            savedFiles = await this.storageClientService.uploadFiles(files).catch((error) => {
                 throw new InternalServerErrorException(error.message);
             });
         }
