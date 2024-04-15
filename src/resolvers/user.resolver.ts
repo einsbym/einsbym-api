@@ -2,8 +2,6 @@ import { Resolver, Query, Mutation, Args, Int, ID, Context } from '@nestjs/graph
 import { UserService } from '../providers/user.service';
 import { User } from 'src/entities/user.entity';
 import { CreateUserInput } from 'src/models/dtos/create-user.input';
-import { UpdateCoverImageInput } from 'src/models/dtos/update-cover-image.input';
-import { UpdateProfilePictureInput } from 'src/models/dtos/update-profile-picture.input';
 import { UpdateUserInput } from 'src/models/dtos/update-user.input';
 import { UpdateBioInput } from 'src/models/dtos/update-bio.input';
 import { UseGuards } from '@nestjs/common';
@@ -17,18 +15,6 @@ export class UserResolver {
     @Mutation(() => User)
     createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
         return this.userService.create(createUserInput);
-    }
-
-    @UseGuards(JwtAuthGuard)
-    @Mutation(() => User)
-    updateProfilePicture(@Context() context: { req: Request }, @Args('updateProfilePictureInput') updateProfilePictureInput: UpdateProfilePictureInput) {
-        return this.userService.updateProfilePicture(context.req, updateProfilePictureInput);
-    }
-
-    @UseGuards(JwtAuthGuard)
-    @Mutation(() => User)
-    updateCoverImage(@Context() context: { req: Request }, @Args('updateCoverImageInput') updateCoverImageInput: UpdateCoverImageInput) {
-        return this.userService.updateCoverImage(context.req, updateCoverImageInput);
     }
 
     @UseGuards(JwtAuthGuard)
