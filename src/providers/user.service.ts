@@ -45,25 +45,25 @@ export class UserService {
     async updateProfilePicture(request: Request, file: Express.Multer.File) {
         const user: User = request['user'];
 
-        if (user.profilePicture) {
-            try {
-                await this.storageClientService.remove(user.profilePicture);
-            } catch (error) {
-                throw new InternalServerErrorException(
-                    'Could not remove file from storage. Check the log for details.',
-                );
-            }
-        }
-
         try {
-            const fileUpdated = await this.storageClientService.uploadFile(file);
+            if (user.profilePicture) {
+                await this.storageClientService.remove(user.profilePicture);
+            }
+
+            const uploadedFile = await this.storageClientService.uploadFile(file);
+
             await this.userRepository.update(user.id, {
-                profilePicture: fileUpdated.filename,
+                profilePicture: uploadedFile.filename,
             });
+
+            user.profilePicture = uploadedFile.filename;
+
+            const { password, ...userWithoutPassword } = user;
+
+            return userWithoutPassword as User;
         } catch (error) {
-            throw new InternalServerErrorException('Could not upload file from storage. Check the log for details.');
+            throw new InternalServerErrorException('Could not update the profile image. Check the log for details.');
         }
-        return this.userRepository.create({ ...user });
     }
 
     async updateCoverImage(request: Request, file: Express.Multer.File) {
