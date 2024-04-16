@@ -1,14 +1,13 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/entities/user.entity';
 import { CreateUserInput } from 'src/models/dtos/create-user.input';
-import { UpdateCoverImageInput } from 'src/models/dtos/update-cover-image.input';
-import { UpdateProfilePictureInput } from 'src/models/dtos/update-profile-picture.input';
 import { UpdateUserInput } from 'src/models/dtos/update-user.input';
 import { UpdateBioInput } from 'src/models/dtos/update-bio.input';
 import { UserStatsView } from 'src/entities/views/user-stats.view';
+import { StorageClientService } from './storage-client.service';
 
 @Injectable()
 export class UserService {
@@ -18,6 +17,8 @@ export class UserService {
 
         @InjectEntityManager()
         private entityManager: EntityManager,
+
+        private storageClientService: StorageClientService,
     ) {}
 
     async create(createUserInput: CreateUserInput) {
@@ -41,24 +42,53 @@ export class UserService {
         return await this.userRepository.save(user);
     }
 
-    async updateProfilePicture(request: Request, updateProfilePictureInput: UpdateProfilePictureInput) {
+    async updateProfilePicture(request: Request, file: Express.Multer.File) {
         const user: User = request['user'];
 
-        await this.userRepository.update(user.id, {
-            profilePicture: updateProfilePictureInput.profilePicture,
-        });
+        try {
+            if (user.profilePicture) {
+                await this.storageClientService.remove(user.profilePicture);
+            }
 
-        return this.userRepository.create({ ...user, ...updateProfilePictureInput });
+            const uploadedFile = await this.storageClientService.uploadFile(file);
+
+            await this.userRepository.update(user.id, {
+                profilePicture: uploadedFile.filename,
+            });
+
+            user.profilePicture = uploadedFile.filename;
+
+            const { password, ...userWithoutPassword } = user;
+
+            return userWithoutPassword as User;
+        } catch (error) {
+            throw new InternalServerErrorException('Could not update the profile image. Check the log for details.');
+        }
     }
 
-    async updateCoverImage(request: Request, updateCoverImageInput: UpdateCoverImageInput) {
+    async updateCoverImage(request: Request, file: Express.Multer.File) {
         const user: User = request['user'];
 
-        await this.userRepository.update(user.id, {
-            coverImage: updateCoverImageInput.coverImage,
-        });
+        if (user.coverImage) {
+            try {
+                await this.storageClientService.remove(user.coverImage);
+            } catch (error) {
+                throw new InternalServerErrorException(
+                    'Could not remove file from storage. Check the log for details.',
+                );
+            }
+        }
 
-        return this.userRepository.create({ ...user, ...updateCoverImageInput });
+        try {
+            const fileUpdated = await this.storageClientService.uploadFile(file);
+            await this.userRepository.update(user.id, {
+                coverImage: fileUpdated.filename,
+            });
+        } catch (error) {
+            throw new InternalServerErrorException('Could not upload file from storage. Check the log for details.');
+        }
+
+        return this.userRepository.create({ ...user });
     }
 
     async updateBio(request: Request, updateBioInput: UpdateBioInput) {
