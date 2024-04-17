@@ -24,6 +24,12 @@ export class UserResolver {
     }
 
     @UseGuards(JwtAuthGuard)
+    @Mutation(() => User)
+    updateUserVisibility(@Context() context: { req: Request }, @Args('isPrivate') isPrivate: boolean) {
+        return this.userService.updateVisibility(context.req, isPrivate);
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Query(() => [User])
     findAllUsers() {
         return this.userService.findAll();

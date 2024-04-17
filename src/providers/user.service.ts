@@ -100,6 +100,16 @@ export class UserService {
         return this.userRepository.create({ ...user, ...updateBioInput });
     }
 
+    async updateVisibility(request: Request, isPrivate: boolean)  {
+        const user: User = request['user'];
+
+        await this.userRepository.update(user.id, {
+            isPrivate: isPrivate,
+        });
+
+        return this.userRepository.create({ ...user, isPrivate: isPrivate });
+    }
+
     findAll() {
         return `This action returns all user`;
     }
