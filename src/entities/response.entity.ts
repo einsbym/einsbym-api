@@ -1,4 +1,4 @@
-import { Field } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
     Column,
     CreateDateColumn,
@@ -12,11 +12,14 @@ import { PostComment } from './post-comment.entity';
 import { User } from './user.entity';
 
 @Entity()
+@ObjectType()
 export class Response {
     @PrimaryGeneratedColumn('uuid')
+    @Field(() => ID)
     id: string;
 
     @Column({ type: 'text' })
+    @Field(() => String)
     response: string;
 
     @ManyToOne(() => User, (user) => user.comments)
@@ -26,6 +29,7 @@ export class Response {
 
     @ManyToOne(() => PostComment, (comment) => comment.responses, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'comment_id' })
+    @Field(() => PostComment)
     comment: PostComment;
 
     @CreateDateColumn({ name: 'created_at' })

@@ -31,6 +31,10 @@ export class PostCommentService {
         return `This action returns all comment`;
     }
 
+    async findById(id: string) {
+        return await this.postCommentRepository.findOneBy({ id: id });
+    }
+
     async findByPost(postId: string): Promise<PostComment[]> {
         const queryBuilder = await this.postCommentRepository
             .createQueryBuilder('pc')

@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
 import { ResponseService } from '../providers/response.service';
 import { Response } from '../entities/response.entity';
 import { CreateResponseInput } from '../models/dtos/create-response.input';
@@ -12,8 +12,11 @@ export class ResponseResolver {
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => Response)
-    createResponse(@Args('createResponseInput') createResponseInput: CreateResponseInput) {
-        return this.responseService.create(createResponseInput);
+    createResponse(
+        @Context() context: { req: Request },
+        @Args('createResponseInput') createResponseInput: CreateResponseInput,
+    ) {
+        return this.responseService.create(context.req, createResponseInput);
     }
 
     @UseGuards(JwtAuthGuard)

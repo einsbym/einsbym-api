@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { PostCommentModule } from './modules/post-comment.module';
 import { StoryModule } from './modules/story.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ResponseModule } from './modules/response.module';
 
 @Module({
     imports: [
@@ -28,6 +29,7 @@ import { ScheduleModule } from '@nestjs/schedule';
         PostModule,
         PostCommentModule,
         StoryModule,
+        ResponseModule
     ],
 })
 export class AppModule {}
