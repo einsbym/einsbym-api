@@ -42,8 +42,8 @@ export class ResponseResolver {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Mutation(() => Response)
-    removeResponse(@Args('id', { type: () => Int }) id: number) {
-        return this.responseService.remove(id);
+    @Mutation(() => String)
+    removeResponse(@Context() context: { req: Request }, @Args('responseId') responseId: string) {
+        return this.responseService.remove(context.req, responseId);
     }
 }

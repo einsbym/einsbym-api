@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Response } from 'src/entities/response.entity';
 import { User } from 'src/entities/user.entity';
@@ -64,7 +64,20 @@ export class ResponseService {
         return await this.responseRepository.save(response);
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} response`;
+    async remove(request: Request, responseId: string) {
+        const user: User = request['user'];
+        const response = await this.responseRepository.findOne({ where: { id: responseId }, relations: { user: true } });
+
+        if (!response) {
+            throw new NotFoundException('Response not found. Maybe you might have already deleted it?');
+        }
+
+        if (response.user.id !== user.id) {
+            throw new ForbiddenException('You are not allowed to perform this action.');
+        }
+
+        return await this.responseRepository.remove(response).then(() => {
+            return "This response has been removed."
+        });
     }
 }
