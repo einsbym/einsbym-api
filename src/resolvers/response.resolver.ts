@@ -1,10 +1,10 @@
-import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
-import { ResponseService } from '../providers/response.service';
+import { UseGuards } from '@nestjs/common';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { Response } from '../entities/response.entity';
 import { CreateResponseInput } from '../models/dtos/create-response.input';
 import { UpdateResponseInput } from '../models/dtos/update-response.input';
-import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { ResponseService } from '../providers/response.service';
 
 @Resolver(() => Response)
 export class ResponseResolver {
@@ -20,9 +20,9 @@ export class ResponseResolver {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Query(() => [Response], { name: 'response' })
-    findAll() {
-        return this.responseService.findAll();
+    @Query(() => [Response])
+    findResponsesByPostComment(@Args('commentId') commentId: string) {
+        return this.responseService.findByPostComment(commentId);
     }
 
     @UseGuards(JwtAuthGuard)
