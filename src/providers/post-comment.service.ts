@@ -48,6 +48,7 @@ export class PostCommentService {
                 'u.profilePicture',
                 'p.id',
             ])
+            .loadRelationCountAndMap('pc.totalResponses', 'pc.responses')
             .leftJoin('pc.user', 'u')
             .leftJoin('pc.post', 'p')
             .where('p.id = :postId', { postId })
