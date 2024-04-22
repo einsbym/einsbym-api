@@ -8,5 +8,6 @@ import { PostModule } from './post.module';
 @Module({
     imports: [TypeOrmModule.forFeature([PostComment]), PostModule],
     providers: [PostCommentResolver, PostCommentService],
+    exports: [PostCommentService],
 })
 export class PostCommentModule {}

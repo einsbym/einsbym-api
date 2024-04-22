@@ -11,7 +11,7 @@ import {
 import { Post } from './post.entity';
 import { Response } from './response.entity';
 import { User } from './user.entity';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 
 @Entity()
 @ObjectType()
@@ -31,6 +31,9 @@ export class PostComment {
     @OneToMany(() => Response, (response) => response.comment)
     // @Field(() => [Response])
     responses: Response[];
+
+    @Field(() => Int)
+    totalResponses: number;
 
     @ManyToOne(() => User, (user) => user.comments)
     @JoinColumn({ name: 'user_id' })

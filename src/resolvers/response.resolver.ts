@@ -1,10 +1,10 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { ResponseService } from '../providers/response.service';
+import { UseGuards } from '@nestjs/common';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { Response } from '../entities/response.entity';
 import { CreateResponseInput } from '../models/dtos/create-response.input';
 import { UpdateResponseInput } from '../models/dtos/update-response.input';
-import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { ResponseService } from '../providers/response.service';
 
 @Resolver(() => Response)
 export class ResponseResolver {
@@ -12,14 +12,17 @@ export class ResponseResolver {
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => Response)
-    createResponse(@Args('createResponseInput') createResponseInput: CreateResponseInput) {
-        return this.responseService.create(createResponseInput);
+    createResponse(
+        @Context() context: { req: Request },
+        @Args('createResponseInput') createResponseInput: CreateResponseInput,
+    ) {
+        return this.responseService.create(context.req, createResponseInput);
     }
 
     @UseGuards(JwtAuthGuard)
-    @Query(() => [Response], { name: 'response' })
-    findAll() {
-        return this.responseService.findAll();
+    @Query(() => [Response])
+    findResponsesByPostComment(@Args('commentId') commentId: string) {
+        return this.responseService.findByPostComment(commentId);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -30,13 +33,17 @@ export class ResponseResolver {
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => Response)
-    updateResponse(@Args('updateResponseInput') updateResponseInput: UpdateResponseInput) {
-        return this.responseService.update(updateResponseInput.id, updateResponseInput);
+    updateResponse(
+        @Context() context: { req: Request },
+        @Args('responseId') responseId: string,
+        @Args('updateResponseInput') updateResponseInput: UpdateResponseInput,
+    ) {
+        return this.responseService.update(context.req, responseId, updateResponseInput);
     }
 
     @UseGuards(JwtAuthGuard)
-    @Mutation(() => Response)
-    removeResponse(@Args('id', { type: () => Int }) id: number) {
-        return this.responseService.remove(id);
+    @Mutation(() => String)
+    removeResponse(@Context() context: { req: Request }, @Args('responseId') responseId: string) {
+        return this.responseService.remove(context.req, responseId);
     }
 }
