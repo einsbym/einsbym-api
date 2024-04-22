@@ -33,8 +33,12 @@ export class ResponseResolver {
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => Response)
-    updateResponse(@Args('updateResponseInput') updateResponseInput: UpdateResponseInput) {
-        return this.responseService.update(updateResponseInput.id, updateResponseInput);
+    updateResponse(
+        @Context() context: { req: Request },
+        @Args('responseId') responseId: string,
+        @Args('updateResponseInput') updateResponseInput: UpdateResponseInput,
+    ) {
+        return this.responseService.update(context.req, responseId, updateResponseInput);
     }
 
     @UseGuards(JwtAuthGuard)

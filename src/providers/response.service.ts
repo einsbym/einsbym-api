@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Response } from 'src/entities/response.entity';
 import { User } from 'src/entities/user.entity';
@@ -51,8 +51,17 @@ export class ResponseService {
         return `This action returns a #${id} response`;
     }
 
-    update(id: number, updateResponseInput: UpdateResponseInput) {
-        return `This action updates a #${id} response`;
+    async update(request: Request, responseId: string, updateResponseInput: UpdateResponseInput) {
+        const user: User = request['user'];
+        const response = await this.responseRepository.findOne({ where: { id: responseId }, relations: { user: true } });
+
+        if (response.user.id !== user.id) {
+            throw new ForbiddenException('You are not allowed to perform this action.');
+        }
+
+        response.response = updateResponseInput.response;
+
+        return await this.responseRepository.save(response);
     }
 
     remove(id: number) {
