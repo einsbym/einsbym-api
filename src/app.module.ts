@@ -13,6 +13,7 @@ import { PostCommentModule } from './modules/post-comment.module';
 import { StoryModule } from './modules/story.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ResponseModule } from './modules/response.module';
+import { BlogModule } from './modules/blog.module';
 
 @Module({
     imports: [
@@ -29,7 +30,8 @@ import { ResponseModule } from './modules/response.module';
         PostModule,
         PostCommentModule,
         StoryModule,
-        ResponseModule
+        ResponseModule,
+        BlogModule,
     ],
 })
 export class AppModule {}
