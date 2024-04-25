@@ -12,8 +12,5 @@ export class CreateBlogInput {
     @IsNotEmpty({ message: 'The body field cannot be empty' })
     body: string;
 
-    @IsString({ message: 'The filename field must be string type' })
-    filename: string;
-
     tags: string[];
 }

@@ -10,18 +10,16 @@ export class BlogService {
     constructor(
         @InjectRepository(Blog)
         private readonly blogRepository: Repository<Blog>,
-
         private readonly storageClientService: StorageClientService,
     ) {}
 
-    async create(createBlogInput: CreateBlogInput, files: Array<Express.Multer.File>) {
+    async create(createBlogInput: CreateBlogInput, file: Express.Multer.File) {
         const blog = this.blogRepository.create(createBlogInput);
+        const uploadedFile = await this.storageClientService.uploadFile(file).catch((error) => {
+            throw new InternalServerErrorException(error.message);
+        });
 
-        if (files.length > 0) {
-            await this.storageClientService.uploadFiles(files).catch((error) => {
-                throw new InternalServerErrorException(error.message);
-            });
-        }
+        blog.filename = uploadedFile.filename;
 
         return await this.blogRepository.save(blog);
     }

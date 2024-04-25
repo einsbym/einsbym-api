@@ -1,5 +1,5 @@
-import { Body, Controller, Post, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { Body, Controller, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { Role } from 'src/decorators/role.decorator';
 import { Roles } from 'src/enums/roles.enum';
@@ -14,8 +14,8 @@ export class BlogController {
     @Post('/create')
     @UseGuards(JwtAuthGuard, RoleGuard)
     @Role(Roles.ADMIN)
-    @UseInterceptors(FilesInterceptor('files'))
-    async create(@Body() createBlogInput?: CreateBlogInput, @UploadedFiles() files?: Array<Express.Multer.File>) {
-        return this.blogService.create(createBlogInput, files);
+    @UseInterceptors(FileInterceptor('file'))
+    async create(@Body() createBlogInput: CreateBlogInput, @UploadedFile() file: Express.Multer.File) {
+        return this.blogService.create(createBlogInput, file);
     }
 }
