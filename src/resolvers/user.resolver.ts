@@ -7,6 +7,10 @@ import { UpdateBioInput } from 'src/models/dtos/update-bio.input';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { UserStatsView } from 'src/entities/views/user-stats.view';
+import { RoleGraphqlGuard } from 'src/guards/role-graphql.guard';
+import { Roles } from 'src/enums/roles.enum';
+import { Role } from 'src/decorators/role.decorator';
+import { Message } from 'src/models/dtos/message.dto';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -27,6 +31,13 @@ export class UserResolver {
     @Mutation(() => User)
     updateUserVisibility(@Context() context: { req: Request }, @Args('isPrivate') isPrivate: boolean) {
         return this.userService.updateVisibility(context.req, isPrivate);
+    }
+
+    @UseGuards(JwtAuthGuard, RoleGraphqlGuard)
+    @Role(Roles.ADMIN)
+    @Mutation(() => Message)
+    updateRole(@Context() context: { req: Request }, @Args('role') role: Roles) {
+        return this.userService.updateRole(context.req, role);
     }
 
     @UseGuards(JwtAuthGuard)

@@ -11,7 +11,7 @@ export class User {
     @Field(() => ID)
     id: string;
 
-    @Column({ nullable: true })
+    @Column({ nullable: false })
     @Field(() => String)
     role: string;
 
