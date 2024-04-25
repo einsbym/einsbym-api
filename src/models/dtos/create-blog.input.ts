@@ -1,23 +1,19 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { CreateTagInput } from './create-tag.input';
+import { IsNotEmpty, IsString } from 'class-validator';
 
-@InputType()
 export class CreateBlogInput {
-    @Field(() => String)
+    @IsNotEmpty({ message: 'The title field cannot be empty' })
+    @IsString({ message: 'The title field must be string type' })
     title: string;
 
-    @Field(() => String)
+    @IsNotEmpty({ message: 'The description field cannot be empty' })
+    @IsString({ message: 'The description field must be string type' })
     description: string;
 
-    @Field(() => String)
-    filename: string;
-
-    @Field(() => String)
+    @IsNotEmpty({ message: 'The body field cannot be empty' })
     body: string;
 
-    @Field(() => Number)
-    views: number;
+    @IsString({ message: 'The filename field must be string type' })
+    filename: string;
 
-    @Field(() => CreateTagInput)
-    createTagInput: CreateTagInput;
+    tags: string[];
 }
