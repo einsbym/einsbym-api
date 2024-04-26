@@ -1,4 +1,10 @@
-import { ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+    BadRequestException,
+    ConflictException,
+    Injectable,
+    InternalServerErrorException,
+    NotFoundException,
+} from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -8,6 +14,7 @@ import { UpdateUserInput } from 'src/models/dtos/update-user.input';
 import { UpdateBioInput } from 'src/models/dtos/update-bio.input';
 import { UserStatsView } from 'src/entities/views/user-stats.view';
 import { StorageClientService } from './storage-client.service';
+import { Roles } from 'src/enums/roles.enum';
 
 @Injectable()
 export class UserService {
@@ -100,7 +107,7 @@ export class UserService {
         return this.userRepository.create({ ...user, ...updateBioInput });
     }
 
-    async updateVisibility(request: Request, isPrivate: boolean)  {
+    async updateVisibility(request: Request, isPrivate: boolean) {
         const user: User = request['user'];
 
         await this.userRepository.update(user.id, {
@@ -108,6 +115,24 @@ export class UserService {
         });
 
         return this.userRepository.create({ ...user, isPrivate: isPrivate });
+    }
+
+    async updateRole(request: Request, role: Roles) {
+        const user: User = request['user'];
+
+        const roles = [Roles.ADMIN, Roles.USER];
+
+        if (!roles.includes(role)) {
+            throw new BadRequestException('invalid role');
+        }
+
+        if (user) {
+            await this.userRepository.update(user.id, {
+                role: role,
+            });
+        }
+
+        return { message: 'role updated successfully' };
     }
 
     findAll() {

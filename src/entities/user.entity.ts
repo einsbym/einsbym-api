@@ -11,6 +11,10 @@ export class User {
     @Field(() => ID)
     id: string;
 
+    @Column({ nullable: false, default: 'user' })
+    @Field(() => String)
+    role: string;
+
     @Column({ name: 'first_name' })
     @Field(() => String)
     firstName: string;
