@@ -9,7 +9,7 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 import { Post } from './post.entity';
-import { Response } from './response.entity';
+import { Reply } from './reply.entity';
 import { User } from './user.entity';
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 
@@ -28,12 +28,11 @@ export class PostComment {
     @JoinColumn({ name: 'post_id' })
     post: Post;
 
-    @OneToMany(() => Response, (response) => response.comment)
-    // @Field(() => [Response])
-    responses: Response[];
+    @OneToMany(() => Reply, (replies) => replies.comment)
+    replies: Reply[];
 
     @Field(() => Int)
-    totalResponses: number;
+    totalReplies: number;
 
     @ManyToOne(() => User, (user) => user.comments)
     @JoinColumn({ name: 'user_id' })

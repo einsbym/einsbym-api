@@ -12,7 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { PostCommentModule } from './modules/post-comment.module';
 import { StoryModule } from './modules/story.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { ResponseModule } from './modules/response.module';
+import { ReplyModule } from './modules/reply.module';
 import { BlogModule } from './modules/blog.module';
 
 @Module({
@@ -30,7 +30,7 @@ import { BlogModule } from './modules/blog.module';
         PostModule,
         PostCommentModule,
         StoryModule,
-        ResponseModule,
+        ReplyModule,
         BlogModule,
     ],
 })
