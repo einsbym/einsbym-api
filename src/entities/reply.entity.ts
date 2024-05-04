@@ -13,21 +13,21 @@ import { User } from './user.entity';
 
 @Entity()
 @ObjectType()
-export class Response {
+export class Reply {
     @PrimaryGeneratedColumn('uuid')
     @Field(() => ID)
     id: string;
 
     @Column({ type: 'text' })
     @Field(() => String)
-    response: string;
+    reply: string;
 
     @ManyToOne(() => User, (user) => user.comments)
     @JoinColumn({ name: 'user_id' })
     @Field(() => User)
     user: User;
 
-    @ManyToOne(() => PostComment, (comment) => comment.responses, { onDelete: 'CASCADE' })
+    @ManyToOne(() => PostComment, (comment) => comment.replies, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'comment_id' })
     @Field(() => PostComment)
     comment: PostComment;
