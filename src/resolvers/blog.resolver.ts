@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Query, Resolver } from '@nestjs/graphql';
+import { Args, Query, Resolver } from '@nestjs/graphql';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { Blog } from 'src/entities/blog.entity';
 import { BlogService } from 'src/providers/blog.service';
@@ -13,5 +13,11 @@ export class BlogResolver {
     @Query(() => [Blog])
     findBlogPosts() {
         return this.blogService.find();
+    }
+
+    // @UseGuards(JwtAuthGuard)
+    @Query(() => Blog)
+    findBlogPost(@Args('id') id: string) {
+        return this.blogService.findById(id);
     }
 }
