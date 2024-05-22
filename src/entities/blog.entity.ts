@@ -28,6 +28,10 @@ export class Blog {
     @Field(() => Int)
     views: number;
 
+    @Column({ name: 'is_published', default: true })
+    @Field(() => Boolean)
+    isPublished: boolean;
+
     @Column({ type: 'json' })
     @Field(() => [String])
     tags: string[];
