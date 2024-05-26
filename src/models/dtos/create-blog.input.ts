@@ -12,5 +12,5 @@ export class CreateBlogInput {
     @IsNotEmpty({ message: 'The body field cannot be empty' })
     body: string;
 
-    tags: string[];
+    tags: string;
 }
