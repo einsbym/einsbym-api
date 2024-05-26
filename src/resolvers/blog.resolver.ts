@@ -9,13 +9,13 @@ import { File } from '../entities/file.entity';
 export class BlogResolver {
     constructor(private readonly blogService: BlogService) {}
 
-    // @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Query(() => [Blog])
     findBlogPosts() {
         return this.blogService.find();
     }
 
-    // @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Query(() => Blog)
     findBlogPost(@Args('id') id: string) {
         return this.blogService.findById(id);

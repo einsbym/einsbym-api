@@ -1,6 +1,39 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
+@ObjectType()
+class Body {
+    @Field(() => String)
+    time: String;
+
+    @Field(() => [Block])
+    blocks: Block[];
+
+    @Field(() => String)
+    version: string;
+}
+
+@ObjectType()
+class Data {
+    @Field(() => String)
+    text: string;
+
+    @Field(() => Int, { nullable: true })
+    level: number;
+}
+
+@ObjectType()
+class Block {
+    @Field(() => String)
+    id: string;
+
+    @Field(() => String)
+    type: string;
+
+    @Field(() => Data)
+    data: Data;
+}
+
 @Entity()
 @ObjectType()
 export class Blog {
@@ -21,8 +54,8 @@ export class Blog {
     filename: string;
 
     @Column({ type: 'json', nullable: false })
-    @Field(() => String)
-    body: string;
+    @Field(() => Body)
+    body: Body;
 
     @Column({ default: 0 })
     @Field(() => Int)
