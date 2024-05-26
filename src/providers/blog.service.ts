@@ -36,8 +36,6 @@ export class BlogService {
     }
 
     async findById(id: string) {
-        const post = await this.blogRepository.findOneBy({ id: id });
-        console.log(post);
-        return post;
+        return await this.blogRepository.findOneBy({ id: id });
     }
 }
