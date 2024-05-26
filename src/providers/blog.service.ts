@@ -15,14 +15,14 @@ export class BlogService {
 
     async create(createBlogInput: CreateBlogInput, file: Express.Multer.File) {
         const blog = new Blog();
-        
+
         // const uploadedFile = await this.storageClientService.uploadFile(file).catch((error) => {
         //     throw new InternalServerErrorException(error.message);
         // });
 
         // blog.filename = uploadedFile.filename;
 
-        blog.filename = "image.png";
+        blog.filename = 'image.png';
         blog.title = createBlogInput.title;
         blog.description = createBlogInput.description;
         blog.body = JSON.parse(createBlogInput.body);
@@ -32,7 +32,7 @@ export class BlogService {
     }
 
     async find() {
-        return await this.blogRepository.find();
+        return await this.blogRepository.find({ order: { createdAt: 'DESC' } });
     }
 
     async findById(id: string) {
