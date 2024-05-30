@@ -52,7 +52,7 @@ export class BlogService {
         return await this.blogRepository.find({ order: { createdAt: 'DESC' } });
     }
 
-    async findById(id: string) {
-        return await this.blogRepository.findOneBy({ id: id });
+    async findBySlug(slug: string) {
+        return await this.blogRepository.findOneBy({ slug: slug });
     }
 }

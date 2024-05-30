@@ -13,7 +13,7 @@ export class BlogResolver {
     }
 
     @Query(() => Blog)
-    findBlogPost(@Args('id') id: string) {
-        return this.blogService.findById(id);
+    findBlogPost(@Args('slug') slug: string) {
+        return this.blogService.findBySlug(slug);
     }
 }
