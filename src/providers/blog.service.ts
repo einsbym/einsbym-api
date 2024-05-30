@@ -13,6 +13,19 @@ export class BlogService {
         private readonly storageClientService: StorageClientService,
     ) {}
 
+    private sanitizeTitle(title: string): string {
+        // Remove special characters and replace spaces with dashes
+        const sanitized = title
+            .toLowerCase() // Convert to lowercase
+            .normalize("NFD") // Normalize to NFD form to separate characters from their diacritical marks
+            .replace(/[\u0300-\u036f]/g, '') // Remove diacritical marks
+            .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except for alphanumeric, spaces, and dashes
+            .trim() // Remove leading and trailing whitespace
+            .replace(/\s+/g, '-'); // Replace spaces with dashes
+    
+        return sanitized;
+    }
+
     async create(createBlogInput: CreateBlogInput, file: Express.Multer.File) {
         const blog = new Blog();
 
@@ -22,8 +35,12 @@ export class BlogService {
 
         // blog.filename = uploadedFile.filename;
 
+        // Generate slug
+        const slug = this.sanitizeTitle(createBlogInput.title);
+
         blog.filename = 'image.png';
         blog.title = createBlogInput.title;
+        blog.slug = slug;
         blog.description = createBlogInput.description;
         blog.body = JSON.parse(createBlogInput.body);
         blog.tags = JSON.parse(createBlogInput.tags);

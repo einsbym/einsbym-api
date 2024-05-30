@@ -41,9 +41,13 @@ export class Blog {
     @Field(() => ID)
     id: string;
 
-    @Column({ nullable: false })
+    @Column({ nullable: false, unique: true })
     @Field(() => String)
     title: string;
+
+    @Column({ nullable: false, unique: true })
+    @Field(() => String)
+    slug: string;
 
     @Column({ nullable: false })
     @Field(() => String)
