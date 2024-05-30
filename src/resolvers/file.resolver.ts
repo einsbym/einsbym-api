@@ -15,7 +15,6 @@ export class FileResolver {
         return this.fileService.create(createFileInput);
     }
 
-    @UseGuards(JwtAuthGuard)
     @Query(() => [File])
     files(
         @Args('fileTypes', { type: () => [String] }) fileTypes: string[],
