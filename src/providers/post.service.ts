@@ -28,7 +28,7 @@ export class PostService {
     async create(request: Request, createPostInput: CreatePostInput, files: Array<Express.Multer.File>) {
         if (!createPostInput.postText && files.length === 0) {
             throw new BadRequestException(
-                'You need to write something or at least select a file in order to save the post',
+                'You need to write something or at least select a file in order to save the post.',
             );
         }
 
@@ -86,7 +86,7 @@ export class PostService {
         const post = await this.postRepository.findOne({ where: { id: postId }, relations: { likes: true } });
 
         if (!post) {
-            throw new NotFoundException('No post found');
+            throw new NotFoundException('No post found.');
         }
 
         if (!post.likes.some((like) => like.id === user.id)) {
@@ -141,7 +141,7 @@ export class PostService {
         });
 
         if (post.user.id !== user.id) {
-            throw new ForbiddenException('You are not allowed to perform this action');
+            throw new ForbiddenException('You are not allowed to perform this action.');
         }
 
         post.postText = updatePostInput.postText;
@@ -154,7 +154,7 @@ export class PostService {
         const post = await this.postRepository.findOne({ where: { id: id }, relations: { files: true, user: true } });
 
         if (post.user.id !== user.id) {
-            throw new ForbiddenException('You are not allowed to perform this action');
+            throw new ForbiddenException('You are not allowed to perform this action.');
         }
 
         for (const file of post.files) {
@@ -169,6 +169,6 @@ export class PostService {
 
         await this.postRepository.remove(post);
 
-        return { message: 'post deleted successfully' };
+        return { message: 'Post deleted successfully!' };
     }
 }

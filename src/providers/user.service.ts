@@ -37,7 +37,7 @@ export class UserService {
         });
 
         if (existingUser) {
-            throw new ConflictException('🖐️ Hey, there is already a user with the same username or email address.');
+            throw new ConflictException('🖐️ Hey, there is already a user with the same username or email address!');
         }
 
         // Hash the password
@@ -132,7 +132,7 @@ export class UserService {
             });
         }
 
-        return { message: 'role updated successfully' };
+        return { message: 'Role updated successfully!' };
     }
 
     findAll() {
@@ -143,7 +143,7 @@ export class UserService {
         const user = await this.userRepository.findOne({ where: { id: id } });
 
         if (!user) {
-            throw new NotFoundException('User not found');
+            throw new NotFoundException('User not found.');
         }
 
         return user;
@@ -153,7 +153,7 @@ export class UserService {
         const user = await this.userRepository.findOne({ where: { username: username } });
 
         if (!user) {
-            throw new NotFoundException('User not found');
+            throw new NotFoundException('User not found.');
         }
 
         return user;
