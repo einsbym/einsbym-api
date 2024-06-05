@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { File } from '../entities/file.entity';
@@ -16,10 +16,22 @@ export class FileService {
         return await this.fileRepository.save(file);
     }
 
+    // NOTE: Actually, we should be doing this in `PostService`, not here.
     async findAll(fileTypes: string[], skip: number, take: number) {
         const queryBuilder = this.fileRepository
             .createQueryBuilder('f')
-            .select(['f.id', 'f.filename', 'f.fileType', 'p.id', 'p.createdAt', 'u.id', 'u.isPrivate'])
+            .select([
+                'f.id',
+                'f.filename',
+                'f.fileType',
+                'p.id',
+                'p.postText',
+                'p.createdAt',
+                'u.id',
+                'u.username',
+                'u.profilePicture',
+                'u.isPrivate',
+            ])
             .leftJoin('f.post', 'p')
             .leftJoin('p.user', 'u')
             .where('f.fileType IN (:...fileTypes)', { fileTypes: fileTypes })
