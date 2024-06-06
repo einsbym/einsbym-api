@@ -16,12 +16,12 @@ export class UserActivityService {
     ) {}
 
     @Process('user-activity')
-    async createUserActivityJob(job: Job<CreateUserActivityInput>) {
+    async processJob(job: Job<CreateUserActivityInput>) {
         const { data } = job;
         await this.userActivityRepository.save(data);
     }
 
-    async createUserActivityQueue(createUserActivityInput: CreateUserActivityInput) {
+    async createJob(createUserActivityInput: CreateUserActivityInput) {
         await this.queue.add('user-activity', createUserActivityInput);
     }
 }

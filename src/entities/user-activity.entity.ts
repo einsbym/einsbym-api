@@ -1,13 +1,16 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class UserActivity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({ type: 'uuid', nullable: true })
-    user_id: string;
+    @Column({ type: 'uuid', name: 'user_id' })
+    userId: string;
 
-    @Column({ type: 'varchar', nullable: true })
-    activity_type: string;
+    @Column({ type: 'varchar' })
+    description: string;
+
+    @CreateDateColumn({ name: 'created_at' })
+    createdAt: Date;
 }

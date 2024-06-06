@@ -49,14 +49,7 @@ export class UserService {
 
         user.password = hash;
 
-        const userSaved: User = await this.userRepository.save(user);
-
-        await this.userActivityService.createUserActivityQueue({
-            user_id: userSaved.id,
-            activity_type: 'dfsdgasg',
-        });
-
-        return userSaved;
+        return await this.userRepository.save(user);
     }
 
     async updateProfilePicture(request: Request, file: Express.Multer.File) {
@@ -76,6 +69,11 @@ export class UserService {
             user.profilePicture = uploadedFile.filename;
 
             const { password, ...userWithoutPassword } = user;
+
+            await this.userActivityService.createJob({
+                userId: user.id,
+                description: `${user.firstName} changed their profile picture.`,
+            });
 
             return userWithoutPassword as User;
         } catch (error) {

@@ -3,8 +3,8 @@ import { InputType, Field } from '@nestjs/graphql';
 @InputType()
 export class CreateUserActivityInput {
     @Field(() => String)
-    user_id: string;
+    userId: string;
 
     @Field(() => String)
-    activity_type: string;
+    description: string;
 }
