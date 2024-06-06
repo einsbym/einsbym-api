@@ -15,6 +15,7 @@ import { UpdateBioInput } from 'src/models/dtos/update-bio.input';
 import { UserStatsView } from 'src/entities/views/user-stats.view';
 import { StorageClientService } from './storage-client.service';
 import { Roles } from 'src/enums/roles.enum';
+import { UserActivityService } from './user-activity.service';
 
 @Injectable()
 export class UserService {
@@ -26,6 +27,8 @@ export class UserService {
         private entityManager: EntityManager,
 
         private storageClientService: StorageClientService,
+
+        private userActivityService: UserActivityService,
     ) {}
 
     async create(createUserInput: CreateUserInput) {
@@ -46,7 +49,14 @@ export class UserService {
 
         user.password = hash;
 
-        return await this.userRepository.save(user);
+        const userSaved: User = await this.userRepository.save(user);
+
+        await this.userActivityService.createUserActivityQueue({
+            user_id: userSaved.id,
+            activity_type: 'dfsdgasg',
+        });
+
+        return userSaved;
     }
 
     async updateProfilePicture(request: Request, file: Express.Multer.File) {

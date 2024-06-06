@@ -8,10 +8,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from 'src/modules/user.module';
 import { User } from 'src/entities/user.entity';
 import { AuthResolver } from './auth.resolver';
+import { UserActivityModule } from 'src/modules/user-activity.module';
 
 @Module({
     imports: [
         UserModule,
+        UserActivityModule,
         JwtModule.registerAsync({
             imports: [ConfigModule],
             useFactory: async (configService: ConfigService) => ({

@@ -14,6 +14,7 @@ import { StoryModule } from './modules/story.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ReplyModule } from './modules/reply.module';
 import { BlogModule } from './modules/blog.module';
+import { UserActivityModule } from './modules/user-activity.module';
 
 @Module({
     imports: [
@@ -32,6 +33,7 @@ import { BlogModule } from './modules/blog.module';
         StoryModule,
         ReplyModule,
         BlogModule,
+        UserActivityModule,
     ],
 })
 export class AppModule {}
