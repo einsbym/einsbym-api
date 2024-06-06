@@ -61,7 +61,7 @@ export class User {
     comments: PostComment[];
 
     @OneToMany(() => UserActivity, (userActivity) => userActivity.user)
-    userActivitys: UserActivity[];
+    userActivities: UserActivity[];
 
     @CreateDateColumn({ name: 'created_at' })
     @Field(() => Date)
