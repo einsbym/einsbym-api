@@ -14,7 +14,8 @@ import { StoryModule } from './modules/story.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ReplyModule } from './modules/reply.module';
 import { BlogModule } from './modules/blog.module';
-import { UserActivityModule } from './modules/user-activity.module';
+import { BullModule } from '@nestjs/bull';
+import { bullAsyncConfig } from './config/bull.config';
 
 @Module({
     imports: [
@@ -24,6 +25,7 @@ import { UserActivityModule } from './modules/user-activity.module';
         }),
         TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
         GraphQLModule.forRootAsync(graphqlAsyncConfig),
+        BullModule.registerQueueAsync(bullAsyncConfig),
         ScheduleModule.forRoot(),
         FileModule,
         UserModule,
@@ -33,7 +35,6 @@ import { UserActivityModule } from './modules/user-activity.module';
         StoryModule,
         ReplyModule,
         BlogModule,
-        UserActivityModule,
     ],
 })
 export class AppModule {}

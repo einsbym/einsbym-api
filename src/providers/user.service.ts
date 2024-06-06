@@ -15,21 +15,43 @@ import { UpdateBioInput } from 'src/models/dtos/update-bio.input';
 import { UserStatsView } from 'src/entities/views/user-stats.view';
 import { StorageClientService } from './storage-client.service';
 import { Roles } from 'src/enums/roles.enum';
-import { UserActivityService } from './user-activity.service';
+import { InjectQueue, Process, Processor } from '@nestjs/bull';
+import { Job, Queue } from 'bull';
+import { CreateUserActivityInput } from 'src/models/dtos/create-user-activity.input';
+import { UserActivity } from 'src/entities/user-activity.entity';
 
 @Injectable()
+@Processor('user-activity')
 export class UserService {
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
 
+        @InjectRepository(UserActivity)
+        private readonly userActivityRepository: Repository<UserActivity>,
+
         @InjectEntityManager()
         private entityManager: EntityManager,
 
-        private storageClientService: StorageClientService,
+        @InjectQueue('user-activity')
+        private readonly queue: Queue,
 
-        private userActivityService: UserActivityService,
+        private storageClientService: StorageClientService,
     ) {}
+
+    @Process('user-activity')
+    async processJob(job: Job<CreateUserActivityInput>) {
+        const { data } = job;
+        await this.userActivityRepository.save(data);
+    }
+
+    async createJob(createUserActivityInput: CreateUserActivityInput) {
+        await this.queue.add('user-activity', createUserActivityInput, {
+            attempts: 3,
+            backoff: 5000,
+            removeOnComplete: true,
+        });
+    }
 
     async create(createUserInput: CreateUserInput) {
         const user = this.userRepository.create(createUserInput);
@@ -70,8 +92,8 @@ export class UserService {
 
             const { password, ...userWithoutPassword } = user;
 
-            await this.userActivityService.createJob({
-                userId: user.id,
+            await this.createJob({
+                user: user,
                 description: `${user.firstName} changed their profile picture.`,
             });
 
@@ -99,6 +121,11 @@ export class UserService {
 
             const { password, ...userWithoutPassword } = user;
 
+            await this.createJob({
+                user: user,
+                description: `${user.firstName} changed their cover image.`,
+            });
+
             return userWithoutPassword as User;
         } catch (error) {
             throw new InternalServerErrorException('Could not upload file from storage. Check the log for details.');
@@ -112,6 +139,11 @@ export class UserService {
             bio: updateBioInput.bio,
         });
 
+        await this.createJob({
+            user: user,
+            description: `${user.firstName} changed their bio.`,
+        });
+
         return this.userRepository.create({ ...user, ...updateBioInput });
     }
 
@@ -120,6 +152,11 @@ export class UserService {
 
         await this.userRepository.update(user.id, {
             isPrivate: isPrivate,
+        });
+
+        await this.createJob({
+            user: user,
+            description: `${user.firstName} changed their visibility.`,
         });
 
         return this.userRepository.create({ ...user, isPrivate: isPrivate });
@@ -139,6 +176,11 @@ export class UserService {
                 role: role,
             });
         }
+
+        await this.createJob({
+            user: user,
+            description: `${user.firstName} changed their role.`,
+        });
 
         return { message: 'Role updated successfully!' };
     }

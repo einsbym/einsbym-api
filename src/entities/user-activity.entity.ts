@@ -1,12 +1,14 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './user.entity';
 
 @Entity()
 export class UserActivity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({ type: 'uuid', name: 'user_id' })
-    userId: string;
+    @ManyToOne(() => User, (user) => user.userActivitys)
+    @JoinColumn({ name: 'user_id' })
+    user: User;
 
     @Column({ type: 'varchar' })
     description: string;
