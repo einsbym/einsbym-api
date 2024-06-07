@@ -3,6 +3,7 @@ import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Up
 import { PostComment } from './post-comment.entity';
 import { Post } from './post.entity';
 import { Story } from './story.entity';
+import { UserActivity } from './user-activity.entity';
 
 @Entity()
 @ObjectType()
@@ -58,6 +59,9 @@ export class User {
 
     @OneToMany(() => PostComment, (comment) => comment.user)
     comments: PostComment[];
+
+    @OneToMany(() => UserActivity, (userActivity) => userActivity.user)
+    userActivities: UserActivity[];
 
     @CreateDateColumn({ name: 'created_at' })
     @Field(() => Date)
