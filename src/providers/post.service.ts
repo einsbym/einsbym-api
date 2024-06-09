@@ -14,6 +14,7 @@ import { Repository } from 'typeorm';
 import { CreatePostInput } from '../models/dtos/create-post.input';
 import { UpdatePostInput } from '../models/dtos/update-post.input';
 import { StorageClientService } from './storage-client.service';
+import { UserService } from './user.service';
 
 @Injectable()
 export class PostService {
@@ -21,6 +22,7 @@ export class PostService {
         @InjectRepository(Post)
         private readonly postRepository: Repository<Post>,
         private readonly storageClientService: StorageClientService,
+        private readonly userService: UserService,
     ) {}
 
     private readonly logger = new Logger(PostService.name);
@@ -45,6 +47,11 @@ export class PostService {
 
         post.user = user;
         post.files = savedFiles;
+
+        await this.userService.createJob({
+            user: user,
+            description: `${user.firstName} created a post.`,
+        });
 
         return await this.postRepository.save(post);
     }
@@ -91,8 +98,17 @@ export class PostService {
 
         if (!post.likes.some((like) => like.id === user.id)) {
             post.likes.push(user);
+
             await this.postRepository.save(post);
-            return (await this.postRepository.save(post)).id;
+
+            const likedPostId = (await this.postRepository.save(post)).id;
+
+            await this.userService.createJob({
+                user: user,
+                description: `${user.firstName} liked a post.`,
+            });
+
+            return likedPostId;
         }
 
         return "It seems like you've liked this post already 🙃";
@@ -104,7 +120,14 @@ export class PostService {
 
         post.likes = post.likes.filter((like) => like.id !== user.id);
 
-        return (await this.postRepository.save(post)).id;
+        const unlikedPostId = (await this.postRepository.save(post)).id;
+
+        await this.userService.createJob({
+            user: user,
+            description: `${user.firstName} unliked a post.`,
+        });
+
+        return unlikedPostId;
     }
 
     async findById(postId: string) {
@@ -146,7 +169,14 @@ export class PostService {
 
         post.postText = updatePostInput.postText;
 
-        return await this.postRepository.save(post);
+        const updatedPost = await this.postRepository.save(post);
+
+        await this.userService.createJob({
+            user: user,
+            description: `${user.firstName} updated their post.`,
+        });
+
+        return updatedPost;
     }
 
     async remove(request: Request, id: string) {
@@ -168,6 +198,10 @@ export class PostService {
         }
 
         await this.postRepository.remove(post);
+        await this.userService.createJob({
+            user: user,
+            description: `${user.firstName} removed their post.`,
+        });
 
         return { message: 'Post deleted successfully!' };
     }

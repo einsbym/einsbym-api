@@ -156,7 +156,7 @@ export class UserService {
 
         await this.createJob({
             user: user,
-            description: `${user.firstName} changed their visibility.`,
+            description: `${user.firstName} changed their visibility settings.`,
         });
 
         return this.userRepository.create({ ...user, isPrivate: isPrivate });
@@ -179,7 +179,7 @@ export class UserService {
 
         await this.createJob({
             user: user,
-            description: `${user.firstName} changed their role.`,
+            description: `${user.firstName}'s role was updated.`,
         });
 
         return { message: 'Role updated successfully!' };
