@@ -1,3 +1,4 @@
+import { InjectQueue, Process, Processor } from '@nestjs/bull';
 import {
     BadRequestException,
     ConflictException,
@@ -6,19 +7,18 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { User } from 'src/entities/user.entity';
-import { CreateUserInput } from 'src/models/dtos/create-user.input';
-import { UpdateUserInput } from 'src/models/dtos/update-user.input';
-import { UpdateBioInput } from 'src/models/dtos/update-bio.input';
-import { UserStatsView } from 'src/entities/views/user-stats.view';
-import { StorageClientService } from './storage-client.service';
-import { Roles } from 'src/enums/roles.enum';
-import { InjectQueue, Process, Processor } from '@nestjs/bull';
 import { Job, Queue } from 'bull';
-import { CreateUserActivityInput } from 'src/models/dtos/create-user-activity.input';
 import { UserActivity } from 'src/entities/user-activity.entity';
+import { User } from 'src/entities/user.entity';
+import { UserStatsView } from 'src/entities/views/user-stats.view';
+import { Roles } from 'src/enums/roles.enum';
+import { CreateUserActivityInput } from 'src/models/dtos/create-user-activity.input';
+import { CreateUserInput } from 'src/models/dtos/create-user.input';
+import { UpdateBioInput } from 'src/models/dtos/update-bio.input';
+import { UpdateUserInput } from 'src/models/dtos/update-user.input';
+import { EntityManager, Repository } from 'typeorm';
+import { StorageClientService } from './storage-client.service';
 
 @Injectable()
 @Processor('user-activity')
@@ -215,6 +215,13 @@ export class UserService {
 
     findOneByEmail(email: string) {
         return this.userRepository.findOne({ where: { email: email } });
+    }
+
+    async findActivities(request: Request): Promise<UserActivity[]> {
+        const user: User = request['user'];
+        const activities = await this.userActivityRepository.find({ where: { user: { id: user.id } } });
+
+        return activities;
     }
 
     update(id: number, updateUserInput: UpdateUserInput) {

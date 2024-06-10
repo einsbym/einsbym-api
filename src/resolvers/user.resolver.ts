@@ -1,16 +1,17 @@
-import { Resolver, Query, Mutation, Args, Int, ID, Context } from '@nestjs/graphql';
-import { UserService } from '../providers/user.service';
-import { User } from 'src/entities/user.entity';
-import { CreateUserInput } from 'src/models/dtos/create-user.input';
-import { UpdateUserInput } from 'src/models/dtos/update-user.input';
-import { UpdateBioInput } from 'src/models/dtos/update-bio.input';
 import { UseGuards } from '@nestjs/common';
+import { Args, Context, ID, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
-import { UserStatsView } from 'src/entities/views/user-stats.view';
-import { RoleGraphqlGuard } from 'src/guards/role-graphql.guard';
-import { Roles } from 'src/enums/roles.enum';
 import { Role } from 'src/decorators/role.decorator';
+import { UserActivity } from 'src/entities/user-activity.entity';
+import { User } from 'src/entities/user.entity';
+import { UserStatsView } from 'src/entities/views/user-stats.view';
+import { Roles } from 'src/enums/roles.enum';
+import { RoleGraphqlGuard } from 'src/guards/role-graphql.guard';
+import { CreateUserInput } from 'src/models/dtos/create-user.input';
 import { Message } from 'src/models/dtos/message.dto';
+import { UpdateBioInput } from 'src/models/dtos/update-bio.input';
+import { UpdateUserInput } from 'src/models/dtos/update-user.input';
+import { UserService } from '../providers/user.service';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -62,6 +63,12 @@ export class UserResolver {
     @Query(() => UserStatsView)
     findUserStats(@Args('username', { type: () => String }) username: string) {
         return this.userService.fetchStats(username);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Query(() => [UserActivity])
+    findActivities(@Context() context: { req: Request }): Promise<UserActivity[]> {
+        return this.userService.findActivities(context.req);
     }
 
     @UseGuards(JwtAuthGuard)
