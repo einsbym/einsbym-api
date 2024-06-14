@@ -1,5 +1,14 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinTable,
+    ManyToMany,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 import { PostComment } from './post-comment.entity';
 import { Post } from './post.entity';
 import { Story } from './story.entity';
@@ -62,6 +71,23 @@ export class User {
 
     @OneToMany(() => UserActivity, (userActivity) => userActivity.user)
     userActivities: UserActivity[];
+
+    @ManyToMany(() => User, (user) => user.following)
+    @JoinTable({
+        name: 'follows',
+        joinColumn: {
+            name: 'follower_id',
+            referencedColumnName: 'id',
+        },
+        inverseJoinColumn: {
+            name: 'following_id',
+            referencedColumnName: 'id',
+        },
+    })
+    following: User[];
+
+    @ManyToMany(() => User, (user) => user.followers)
+    followers: User[];
 
     @CreateDateColumn({ name: 'created_at' })
     @Field(() => Date)

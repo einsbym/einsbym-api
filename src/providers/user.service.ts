@@ -224,6 +224,27 @@ export class UserService {
         return activities;
     }
 
+    async follow(followerId: string, request: Request) {
+        const user: User = request['user'];
+        const follower = await this.userRepository.findOne({ where: { id: followerId }, relations: ['following'] });
+        const following = await this.userRepository.findOne({ where: { id: user.id } });
+
+        if (follower && following) {
+            follower.following.push(following);
+            return await this.userRepository.save(follower);
+        }
+    }
+
+    async unfollow(followerId: string, request: Request) {
+        const requestUser: User = request['user'];
+        const follower = await this.userRepository.findOne({ where: { id: followerId }, relations: ['following'] });
+
+        if (follower) {
+            follower.following = follower.following.filter((user) => user.id !== requestUser.id);
+            return await this.userRepository.save(follower);
+        }
+    }
+
     update(id: number, updateUserInput: UpdateUserInput) {
         return `This action updates a #${id} user`;
     }

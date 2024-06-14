@@ -82,4 +82,16 @@ export class UserResolver {
     removeUser(@Args('id', { type: () => Int }) id: number) {
         return this.userService.remove(id);
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Mutation(() => User)
+    follow(@Args('followingId', { type: () => String }) followingId: string, @Context() context: { req: Request }) {
+        return this.userService.follow(followingId, context.req);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Mutation(() => User)
+    unfollow(@Args('followingId', { type: () => String }) followingId: string, @Context() context: { req: Request }) {
+        return this.userService.unfollow(followingId, context.req);
+    }
 }
