@@ -85,13 +85,19 @@ export class UserResolver {
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => User)
-    follow(@Args('followingId', { type: () => String }) followingId: string, @Context() context: { req: Request }) {
-        return this.userService.follow(followingId, context.req);
+    follow(
+        @Args('userToFollowId', { type: () => String }) userToFollowId: string,
+        @Context() context: { req: Request },
+    ) {
+        return this.userService.follow(context.req, userToFollowId);
     }
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => User)
-    unfollow(@Args('followingId', { type: () => String }) followingId: string, @Context() context: { req: Request }) {
-        return this.userService.unfollow(followingId, context.req);
+    unfollow(
+        @Args('userToUnfollowId', { type: () => String }) userToUnfollowId: string,
+        @Context() context: { req: Request },
+    ) {
+        return this.userService.unfollow(context.req, userToUnfollowId);
     }
 }

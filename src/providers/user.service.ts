@@ -224,25 +224,30 @@ export class UserService {
         return activities;
     }
 
-    async follow(followerId: string, request: Request) {
+    async follow(request: Request, userToFollowId: string) {
         const user: User = request['user'];
-        const follower = await this.userRepository.findOne({ where: { id: followerId }, relations: ['following'] });
-        const following = await this.userRepository.findOne({ where: { id: user.id } });
+        const follower = await this.userRepository.findOne({
+            where: { id: user.id },
+            relations: ['following'],
+        });
+        const userToFollow = await this.userRepository.findOne({ where: { id: userToFollowId } });
 
-        if (follower && following) {
-            follower.following.push(following);
-            return await this.userRepository.save(follower);
+        if (!follower || !userToFollow) {
+            throw new NotFoundException('Users not found.');
         }
+
+        follower.following.push(userToFollow);
+
+        return await this.userRepository.save(follower);
     }
 
-    async unfollow(followerId: string, request: Request) {
-        const requestUser: User = request['user'];
-        const follower = await this.userRepository.findOne({ where: { id: followerId }, relations: ['following'] });
+    async unfollow(request: Request, userToUnfollowId: string) {
+        const user: User = request['user'];
+        const follower = await this.userRepository.findOne({ where: { id: user.id }, relations: ['following'] });
 
-        if (follower) {
-            follower.following = follower.following.filter((user) => user.id !== requestUser.id);
-            return await this.userRepository.save(follower);
-        }
+        follower.following = follower.following.filter((user) => user.id !== userToUnfollowId);
+
+        return await this.userRepository.save(follower);
     }
 
     update(id: number, updateUserInput: UpdateUserInput) {
