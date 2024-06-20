@@ -72,6 +72,12 @@ export class UserResolver {
     }
 
     @UseGuards(JwtAuthGuard)
+    @Query(() => Boolean)
+    isFollowing(@Args('followerId') followerId: string, @Context() context: { req: Request }) {
+        return this.userService.isFollowing(followerId, context.req);
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Mutation(() => User)
     updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
         return this.userService.update(updateUserInput.id, updateUserInput);

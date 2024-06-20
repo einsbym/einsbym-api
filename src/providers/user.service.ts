@@ -185,6 +185,20 @@ export class UserService {
         return { message: 'Role updated successfully!' };
     }
 
+    async isFollowing(followerId: string, request: Request) {
+        const requestUser: User = request['user'];
+
+        const follower = await this.userRepository.findOne({ where: { id: requestUser.id }, relations: ['following'] });
+
+        if (!follower) {
+            throw new Error(`Follower with id ${followerId} not found.`);
+        }
+
+        const followingUser = follower.following.find((user) => user.id === followerId);
+
+        return !!followingUser;
+    }
+
     findAll() {
         return `This action returns all user`;
     }

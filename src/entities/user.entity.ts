@@ -86,9 +86,6 @@ export class User {
     })
     following: User[];
 
-    @ManyToMany(() => User, (user) => user.followers)
-    followers: User[];
-
     @CreateDateColumn({ name: 'created_at' })
     @Field(() => Date)
     createdAt: Date;
