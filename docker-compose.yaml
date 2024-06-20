@@ -12,3 +12,27 @@ services:
       - 8000:80
     environment:
       REDIS_1_HOST: redis
+
+  einsbym-api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      DB_HOST: "192.168.255.107"
+      DB_PORT: "5432"
+      DB_USER: "postgres"
+      DB_PASSWORD: "root"
+      DB_NAME: "einsbym"
+      DB_SYNCRONIZE: "true"
+      SERVER_PORT: "4000"
+      JWT_SECRET: "wowlookatmyamazingsecretkey"
+      EINSBYM_STORAGE: "http://localhost:8080/storage-service"
+
+    networks:
+      - network
+    ports:
+      - 3000:3000
+
+networks:
+  network:
+    driver: bridge
