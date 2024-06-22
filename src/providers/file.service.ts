@@ -1,14 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { File } from '../entities/file.entity';
 import { CreateFileInput } from '../models/dtos/create-file.input';
+import { StorageClientService } from './storage-client.service';
 
 @Injectable()
 export class FileService {
     constructor(
         @InjectRepository(File)
         private readonly fileRepository: Repository<File>,
+        private readonly storageClientService: StorageClientService,
     ) {}
 
     async create(createFileInput: CreateFileInput) {
@@ -77,5 +79,18 @@ export class FileService {
             .getOne();
 
         return file;
+    }
+
+    async remove(request: Request, id: string) {
+        const file = await this.fileRepository.findOneBy({ id: id });
+
+        try {
+            await this.storageClientService.remove(file.filename);
+            await this.fileRepository.remove(file);
+
+            return 'File removed successfully';
+        } catch (error) {
+            throw new InternalServerErrorException('Could not remove file. Check the log for details.');
+        }
     }
 }
