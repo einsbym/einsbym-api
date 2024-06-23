@@ -51,7 +51,7 @@ export class UserService {
 
     async isCurrentlyOnline(username: string) {
         const jobs = await this.onlineUsersQueue.getWaiting();
-        const isOnline = !!jobs.find((job) => job.data === username);
+        const isOnline = !!jobs.find((job) => job?.data === username);
 
         return isOnline;
     }
@@ -59,7 +59,7 @@ export class UserService {
     async onlineInstances(request: Request) {
         const user: User = request['user'];
         const jobs = await this.onlineUsersQueue.getWaiting();
-        const onlineInstances = jobs.filter((job) => job.data === user.username);
+        const onlineInstances = jobs.filter((job) => job?.data === user.username);
 
         return onlineInstances.length;
     }
