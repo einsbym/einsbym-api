@@ -112,8 +112,15 @@ export class UserResolver {
         return this.userService.isCurrentlyOnline(username);
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Query(() => Int)
+    onlineInstances(@Context() context: { req: Request }) {
+        return this.userService.onlineInstances(context.req);
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Mutation(() => Boolean)
-    setToOffline(@Args('username') username: string) {
-        return this.userService.setToOffline(username);
+    setToOffline(@Context() context: { req: Request }) {
+        return this.userService.setToOffline(context.req);
     }
 }

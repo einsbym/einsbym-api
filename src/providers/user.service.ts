@@ -56,9 +56,18 @@ export class UserService {
         return isOnline;
     }
 
-    async setToOffline(username: string) {
+    async onlineInstances(request: Request) {
+        const user: User = request['user'];
         const jobs = await this.onlineUsersQueue.getWaiting();
-        const onlineUser = jobs.find((job) => job.data === username);
+        const onlineInstances = jobs.filter((job) => job.data === user.username);
+
+        return onlineInstances.length;
+    }
+
+    async setToOffline(request: Request) {
+        const user: User = request['user'];
+        const jobs = await this.onlineUsersQueue.getWaiting();
+        const onlineUser = jobs.find((job) => job.data === user.username);
 
         return await onlineUser
             .remove()
