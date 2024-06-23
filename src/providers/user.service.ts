@@ -1,4 +1,4 @@
-import { InjectQueue, Process, Processor } from '@nestjs/bull';
+import { InjectQueue } from '@nestjs/bull';
 import {
     BadRequestException,
     ConflictException,
@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { Job, Queue } from 'bull';
+import { Queue } from 'bull';
 import { UserActivity } from 'src/entities/user-activity.entity';
 import { User } from 'src/entities/user.entity';
 import { UserStatsView } from 'src/entities/views/user-stats.view';
@@ -21,7 +21,6 @@ import { EntityManager, Repository } from 'typeorm';
 import { StorageClientService } from './storage-client.service';
 
 @Injectable()
-@Processor('user-activity')
 export class UserService {
     constructor(
         @InjectRepository(User)
@@ -34,19 +33,31 @@ export class UserService {
         private entityManager: EntityManager,
 
         @InjectQueue('user-activity')
-        private readonly queue: Queue,
+        private readonly userActivityQueue: Queue,
+
+        @InjectQueue('online-users')
+        private readonly onlineUsersQueue: Queue,
 
         private storageClientService: StorageClientService,
     ) {}
 
-    @Process('user-activity')
-    async processJob(job: Job<CreateUserActivityInput>) {
-        const { data } = job;
-        await this.userActivityRepository.save(data);
+    async createOnlineUserJob(username: string) {
+        await this.onlineUsersQueue.add('online-users', username, {
+            attempts: 3,
+            backoff: 5000,
+            removeOnComplete: true,
+        });
     }
 
-    async createJob(createUserActivityInput: CreateUserActivityInput) {
-        await this.queue.add('user-activity', createUserActivityInput, {
+    async isCurrentlyOnline(username: string) {
+        const jobs = await this.onlineUsersQueue.getWaiting();
+        const isOnline = !!jobs.find((job) => job.data === username);
+
+        return isOnline;
+    }
+
+    async createUserActivityJob(createUserActivityInput: CreateUserActivityInput) {
+        await this.userActivityQueue.add('user-activity', createUserActivityInput, {
             attempts: 3,
             backoff: 5000,
             removeOnComplete: true,
@@ -92,7 +103,7 @@ export class UserService {
 
             const { password, ...userWithoutPassword } = user;
 
-            await this.createJob({
+            await this.createUserActivityJob({
                 user: user,
                 description: `${user.firstName} changed their profile picture.`,
             });
@@ -121,7 +132,7 @@ export class UserService {
 
             const { password, ...userWithoutPassword } = user;
 
-            await this.createJob({
+            await this.createUserActivityJob({
                 user: user,
                 description: `${user.firstName} changed their cover image.`,
             });
@@ -139,7 +150,7 @@ export class UserService {
             bio: updateBioInput.bio,
         });
 
-        await this.createJob({
+        await this.createUserActivityJob({
             user: user,
             description: `${user.firstName} changed their bio.`,
         });
@@ -154,7 +165,7 @@ export class UserService {
             isPrivate: isPrivate,
         });
 
-        await this.createJob({
+        await this.createUserActivityJob({
             user: user,
             description: `${user.firstName} changed their visibility settings.`,
         });
@@ -177,7 +188,7 @@ export class UserService {
             });
         }
 
-        await this.createJob({
+        await this.createUserActivityJob({
             user: user,
             description: `${user.firstName}'s role was updated.`,
         });

@@ -21,6 +21,8 @@ export class AuthService {
         const { password, ...userWithoutPassword } = user;
         const payload = { sub: user.id };
 
+        await this.usersService.createOnlineUserJob(userWithoutPassword.username);
+
         return {
             accessToken: await this.jwtService.signAsync(payload),
             user: userWithoutPassword,

@@ -48,7 +48,7 @@ export class PostService {
         post.user = user;
         post.files = savedFiles;
 
-        await this.userService.createJob({
+        await this.userService.createUserActivityJob({
             user: user,
             description: `${user.firstName} created a post.`,
         });
@@ -103,7 +103,7 @@ export class PostService {
 
             const likedPostId = (await this.postRepository.save(post)).id;
 
-            await this.userService.createJob({
+            await this.userService.createUserActivityJob({
                 user: user,
                 description: `${user.firstName} liked a post.`,
             });
@@ -122,7 +122,7 @@ export class PostService {
 
         const unlikedPostId = (await this.postRepository.save(post)).id;
 
-        await this.userService.createJob({
+        await this.userService.createUserActivityJob({
             user: user,
             description: `${user.firstName} unliked a post.`,
         });
@@ -171,7 +171,7 @@ export class PostService {
 
         const updatedPost = await this.postRepository.save(post);
 
-        await this.userService.createJob({
+        await this.userService.createUserActivityJob({
             user: user,
             description: `${user.firstName} updated their post.`,
         });
@@ -198,7 +198,7 @@ export class PostService {
         }
 
         await this.postRepository.remove(post);
-        await this.userService.createJob({
+        await this.userService.createUserActivityJob({
             user: user,
             description: `${user.firstName} removed their post.`,
         });

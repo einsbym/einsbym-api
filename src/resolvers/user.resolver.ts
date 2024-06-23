@@ -106,4 +106,9 @@ export class UserResolver {
     ) {
         return this.userService.unfollow(context.req, userToUnfollowId);
     }
+
+    @Query(() => Boolean)
+    isCurrentlyOnline(@Args('username') username: string) {
+        return this.userService.isCurrentlyOnline(username);
+    }
 }
