@@ -111,4 +111,9 @@ export class UserResolver {
     isCurrentlyOnline(@Args('username') username: string) {
         return this.userService.isCurrentlyOnline(username);
     }
+
+    @Mutation(() => Boolean)
+    setToOffline(@Args('username') username: string) {
+        return this.userService.setToOffline(username);
+    }
 }

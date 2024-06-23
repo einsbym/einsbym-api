@@ -56,6 +56,20 @@ export class UserService {
         return isOnline;
     }
 
+    async setToOffline(username: string) {
+        const jobs = await this.onlineUsersQueue.getWaiting();
+        const onlineUser = jobs.find((job) => job.data === username);
+
+        return await onlineUser
+            .remove()
+            .then(() => {
+                return true;
+            })
+            .catch(() => {
+                return false;
+            });
+    }
+
     async createUserActivityJob(createUserActivityInput: CreateUserActivityInput) {
         await this.userActivityQueue.add('user-activity', createUserActivityInput, {
             attempts: 3,
