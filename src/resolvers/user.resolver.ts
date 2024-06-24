@@ -67,8 +67,11 @@ export class UserResolver {
 
     @UseGuards(JwtAuthGuard)
     @Query(() => [UserActivity])
-    findActivities(@Context() context: { req: Request }): Promise<UserActivity[]> {
-        return this.userService.findActivities(context.req);
+    findActivities(
+        @Context() context: { req: Request },
+        @Args('take', { type: () => Int, nullable: true }) take: number,
+    ): Promise<UserActivity[]> {
+        return this.userService.findActivities(context.req, take);
     }
 
     @UseGuards(JwtAuthGuard)
