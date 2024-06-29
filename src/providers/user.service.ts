@@ -265,10 +265,10 @@ export class UserService {
         return this.userRepository.findOne({ where: { email: email } });
     }
 
-    async findActivities(request: Request, take?: number): Promise<UserActivity[]> {
+    async findActivities(request: Request, userId?: string, take?: number): Promise<UserActivity[]> {
         const user: User = request['user'];
         const activities = await this.userActivityRepository.find({
-            where: { user: { id: user.id } },
+            where: { user: { id: userId || user.id } },
             take: take || null,
             order: { createdAt: 'DESC' },
         });
