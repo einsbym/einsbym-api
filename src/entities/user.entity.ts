@@ -9,6 +9,7 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
+import { Blog } from './blog.entity';
 import { PostComment } from './post-comment.entity';
 import { Post } from './post.entity';
 import { Story } from './story.entity';
@@ -65,6 +66,9 @@ export class User {
 
     @OneToMany(() => Post, (post) => post.user)
     posts: Post[];
+
+    @OneToMany(() => Blog, (blogPosts) => blogPosts.user)
+    blogPosts: Blog[];
 
     @OneToMany(() => PostComment, (comment) => comment.user)
     comments: PostComment[];

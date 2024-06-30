@@ -1,5 +1,14 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from 'typeorm';
+import { User } from './user.entity';
 
 @ObjectType()
 class Body {
@@ -72,6 +81,11 @@ export class Blog {
     @Column({ type: 'json' })
     @Field(() => [String])
     tags: string[];
+
+    @ManyToOne(() => User, (user) => user.blogPosts)
+    @JoinColumn({ name: 'user_id' })
+    @Field(() => User)
+    user: User;
 
     @CreateDateColumn({ name: 'created_at' })
     @Field(() => Date)

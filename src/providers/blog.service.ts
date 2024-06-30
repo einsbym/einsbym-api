@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Blog } from 'src/entities/blog.entity';
+import { User } from 'src/entities/user.entity';
 import { CreateBlogInput } from 'src/models/dtos/create-blog.input';
 import { Repository } from 'typeorm';
 import { StorageClientService } from './storage-client.service';
@@ -26,7 +27,8 @@ export class BlogService {
         return sanitized;
     }
 
-    async create(createBlogInput: CreateBlogInput, file: Express.Multer.File) {
+    async create(request: Request, createBlogInput: CreateBlogInput, file: Express.Multer.File) {
+        const user: User = request['user'];
         const blog = new Blog();
 
         // Generate slug
@@ -38,6 +40,7 @@ export class BlogService {
         blog.description = createBlogInput.description;
         blog.tags = JSON.parse(createBlogInput.tags);
         blog.body = JSON.parse(createBlogInput.body);
+        blog.user = user;
 
         if (blog.body.blocks.length === 0) {
             throw new BadRequestException('The body of the post was not provided.');
@@ -57,6 +60,6 @@ export class BlogService {
     }
 
     async findBySlug(slug: string) {
-        return await this.blogRepository.findOneBy({ slug: slug });
+        return await this.blogRepository.findOne({ where: { slug: slug }, relations: { user: true } });
     }
 }
