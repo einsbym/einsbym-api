@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Blog } from 'src/entities/blog.entity';
 import { User } from 'src/entities/user.entity';
@@ -34,7 +34,7 @@ export class BlogService {
         // Generate slug
         const slug = this.sanitizeTitle(createBlogInput.title);
 
-        blog.filename = 'image.png';
+        blog.filename = '';
         blog.title = createBlogInput.title;
         blog.slug = slug;
         blog.description = createBlogInput.description;
@@ -46,11 +46,13 @@ export class BlogService {
             throw new BadRequestException('The body of the post was not provided.');
         }
 
-        // const uploadedFile = await this.storageClientService.uploadFile(file).catch((error) => {
-        //     throw new InternalServerErrorException(error.message);
-        // });
-
-        // blog.filename = uploadedFile.filename;
+        if (file) {
+            const uploadedFile = await this.storageClientService.uploadFile(file).catch((error) => {
+                throw new InternalServerErrorException(error.message);
+            });
+    
+            blog.filename = uploadedFile.filename;   
+        }
 
         return await this.blogRepository.save(blog);
     }
