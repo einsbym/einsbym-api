@@ -19,7 +19,7 @@ export class FileResolver {
     files(
         @Args('fileTypes', { type: () => [String] }) fileTypes: string[],
         @Args('page', { type: () => Int, nullable: true }) page = 1,
-        @Args('limit', { type: () => Int, nullable: true }) limit = 8,
+        @Args('limit', { type: () => Int, nullable: true }) limit = 12,
     ) {
         // Calculate the number of posts to skip based on the page and limit parameters
         const skip = (page - 1) * limit;
