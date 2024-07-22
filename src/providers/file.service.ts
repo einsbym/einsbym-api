@@ -45,6 +45,15 @@ export class FileService {
         return await queryBuilder.getMany();
     }
 
+    async findById(fileId: string): Promise<File> {
+        return await this.fileRepository.findOne({
+            where: { id: fileId },
+            relations: {
+                post: true,
+            },
+        });
+    }
+
     async findByUser(userId: string) {
         const queryBuilder = this.fileRepository
             .createQueryBuilder('f')

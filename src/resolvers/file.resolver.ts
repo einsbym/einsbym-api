@@ -28,6 +28,12 @@ export class FileResolver {
     }
 
     @UseGuards(JwtAuthGuard)
+    @Query(() => File)
+    findFileById(@Args('fileId', { type: () => String }) fileId: string): Promise<File> {
+        return this.fileService.findById(fileId);
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Query(() => [File])
     findFilesByUser(@Args('userId', { type: () => String }) userId: string) {
         return this.fileService.findByUser(userId);
