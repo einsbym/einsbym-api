@@ -4,7 +4,7 @@ services:
     ports:
       - 6379:6379
     volumes:
-      - "./redis:/data"
+      - ./redis:/data
 
   redisadmin:
     image: erikdubbelboer/phpredisadmin:latest
@@ -12,27 +12,48 @@ services:
       - 8000:80
     environment:
       REDIS_1_HOST: redis
+    networks:
+      - einsbym-network
+
+  einsbym-database:
+    image: postgres:alpine
+    container_name: einsbym-database
+    volumes:
+      - einsbym-database-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: einsbym
+    ports:
+      - "5000:5432"
+    networks:
+      - einsbym-network
 
   einsbym-api:
     build:
       context: .
       dockerfile: ./Dockerfile
+    depends_on:
+      - einsbym-database
     environment:
-      DB_HOST: "192.168.255.107"
-      DB_PORT: "5432"
-      DB_USER: "postgres"
-      DB_PASSWORD: "root"
-      DB_NAME: "einsbym"
-      DB_SYNCRONIZE: "true"
-      SERVER_PORT: "4000"
-      JWT_SECRET: "wowlookatmyamazingsecretkey"
-      EINSBYM_STORAGE: "http://localhost:8080/storage-service"
-
+      DB_HOST: einsbym-database
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: root
+      DB_NAME: einsbym
+      DB_SYNCRONIZE: true
+      SERVER_PORT: 4000
+      JWT_SECRET: wowlookatmyamazingsecretkey
+      EINSBYM_STORAGE: http://localhost:8080/storage-service
     networks:
-      - network
+      - einsbym-network
     ports:
       - 3000:3000
 
 networks:
-  network:
+  einsbym-network:
     driver: bridge
+    external: true
+
+volumes:
+  einsbym-database-data:
