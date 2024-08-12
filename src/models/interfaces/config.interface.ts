@@ -1,3 +1,8 @@
+interface RedisConfigProps {
+    host: string;
+    port: number;
+}
+
 interface ApiConfigProps {
     apiUrl: string;
     httpTimeout: number;
@@ -25,4 +30,5 @@ export interface ConfigProps {
         database: PostgresConfigProps;
     };
     graphql: GqlConfigProps;
+    redis: RedisConfigProps;
 }

@@ -5,6 +5,8 @@ services:
       - 6379:6379
     volumes:
       - ./redis:/data
+    networks:
+      - einsbym-network
 
   redisadmin:
     image: erikdubbelboer/phpredisadmin:latest
@@ -33,6 +35,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+    container_name: einsbym-api
     depends_on:
       - einsbym-database
     environment:
@@ -41,14 +44,16 @@ services:
       DB_USER: postgres
       DB_PASSWORD: root
       DB_NAME: einsbym
-      DB_SYNCRONIZE: true
+      DB_SYNCRONIZE: false
       SERVER_PORT: 4000
       JWT_SECRET: wowlookatmyamazingsecretkey
-      EINSBYM_STORAGE: http://localhost:8080/storage-service
+      EINSBYM_STORAGE: einsbym-api-gateway/storage-service
+      REDIS_PORT: 6379
+      REDIS_HOST: redis
+    ports:
+      - 4000:4000
     networks:
       - einsbym-network
-    ports:
-      - 3000:3000
 
 networks:
   einsbym-network:
