@@ -32,12 +32,12 @@ export class AuthService {
     async getUser(id: string) {
         const user = await this.usersService.findById(id);
 
-    if (!user) {
+        if (!user) {
             throw new NotFoundException('User not found');
         }
 
-    const { password, ...userWithoutPassword } = user;
+        const { password, ...userWithoutPassword } = user;
 
         return userWithoutPassword;
-}
+    }
 }
