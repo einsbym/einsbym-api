@@ -27,7 +27,7 @@ services:
       POSTGRES_PASSWORD: root
       POSTGRES_DB: einsbym
     ports:
-      - "5000:5432"
+      - "5432:5432"
     networks:
       - einsbym-network
 
@@ -38,6 +38,7 @@ services:
     container_name: einsbym-api
     depends_on:
       - einsbym-database
+      - redis
     environment:
       DB_HOST: einsbym-database
       DB_PORT: 5432
@@ -48,8 +49,8 @@ services:
       SERVER_PORT: 4000
       JWT_SECRET: wowlookatmyamazingsecretkey
       EINSBYM_STORAGE: einsbym-api-gateway/storage-service
-      REDIS_PORT: 6379
       REDIS_HOST: redis
+      REDIS_PORT: 6379
     ports:
       - 4000:4000
     networks:

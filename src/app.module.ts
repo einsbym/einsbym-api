@@ -25,7 +25,7 @@ import { bullAsyncConfig } from './config/bull.config';
         }),
         TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
         GraphQLModule.forRootAsync(graphqlAsyncConfig),
-        BullModule.registerQueueAsync(bullAsyncConfig),
+        BullModule.forRootAsync(bullAsyncConfig),
         ScheduleModule.forRoot(),
         FileModule,
         UserModule,
