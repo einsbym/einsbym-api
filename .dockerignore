@@ -1,0 +1,16 @@
+# hidden files and folders
+.git
+.env.template
+.husky
+.github
+
+# compiled output
+dist
+node_modules
+redis
+
+# e2e tests folder
+test
+
+# misc
+README.md
