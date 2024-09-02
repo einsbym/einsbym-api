@@ -45,10 +45,13 @@ services:
       DB_USER: postgres
       DB_PASSWORD: root
       DB_NAME: einsbym
-      DB_SYNCRONIZE: false
+      DB_SYNCRONIZE: true
+
       SERVER_PORT: 4000
       JWT_SECRET: wowlookatmyamazingsecretkey
-      EINSBYM_STORAGE: einsbym-api-gateway/storage-service
+      
+      EINSBYM_STORAGE: http://einsbym-storage:8080/storage-service
+      
       REDIS_HOST: redis
       REDIS_PORT: 6379
     ports:
