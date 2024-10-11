@@ -42,18 +42,20 @@ export class UserService {
     ) {}
 
     async createOnlineUserJob(username: string) {
-        await this.onlineUsersQueue.add('online-users', username, {
-            attempts: 3,
-            backoff: 5000,
-            removeOnComplete: true,
-        });
+        await this.onlineUsersQueue.add(
+            { username },
+            {
+                jobId: username,
+                attempts: 3,
+                backoff: 5000,
+                removeOnComplete: true,
+            },
+        );
     }
 
     async isCurrentlyOnline(username: string) {
-        const jobs = await this.onlineUsersQueue.getWaiting();
-        const isOnline = !!jobs.find((job) => job?.data === username);
-
-        return isOnline;
+        const isOnline = await this.onlineUsersQueue.getJob(username);
+        return !!isOnline;
     }
 
     async onlineInstances(request: Request) {
@@ -66,10 +68,9 @@ export class UserService {
 
     async setToOffline(request: Request) {
         const user: User = request['user'];
-        const jobs = await this.onlineUsersQueue.getWaiting();
-        const onlineUser = jobs.find((job) => job?.data === user.username);
+        const job = await this.onlineUsersQueue.getJob(user.username);
 
-        return await onlineUser
+        return await job
             .remove()
             .then(() => {
                 return true;
