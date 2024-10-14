@@ -8,12 +8,10 @@ services:
     networks:
       - einsbym-network
 
-  redisadmin:
-    image: erikdubbelboer/phpredisadmin:latest
+  redisinsight:
+    image: redis/redisinsight:latest
     ports:
-      - 8000:80
-    environment:
-      REDIS_1_HOST: redis
+      - 5540:5540
     networks:
       - einsbym-network
 
