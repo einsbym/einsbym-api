@@ -19,7 +19,7 @@ services:
     image: postgres:alpine
     container_name: einsbym-database
     volumes:
-      - einsbym-database-data:/var/lib/postgresql/data
+      - database:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
@@ -43,7 +43,7 @@ services:
       DB_USER: postgres
       DB_PASSWORD: root
       DB_NAME: einsbym
-      DB_SYNCRONIZE: true
+      DB_SYNCRONIZE: false
 
       SERVER_PORT: 4000
       JWT_SECRET: wowlookatmyamazingsecretkey
@@ -63,4 +63,4 @@ networks:
     external: true
 
 volumes:
-  einsbym-database-data:
+  database:
