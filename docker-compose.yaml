@@ -1,5 +1,8 @@
 services:
   redis:
+    profiles:
+      - dev
+      - local
     image: redis:alpine
     ports:
       - 6379:6379
@@ -9,6 +12,9 @@ services:
       - einsbym-network
 
   redisinsight:
+    profiles:
+      - dev
+      - local
     image: redis/redisinsight:latest
     ports:
       - 5540:5540
@@ -16,6 +22,9 @@ services:
       - einsbym-network
 
   einsbym-database:
+    profiles:
+      - dev
+      - local
     image: postgres:alpine
     container_name: einsbym-database
     volumes:
@@ -24,12 +33,15 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
       POSTGRES_DB: einsbym
+      PGTZ: America/Recife
     ports:
       - "5432:5432"
     networks:
       - einsbym-network
 
   einsbym-api:
+    profiles:
+      - local
     build:
       context: .
       dockerfile: ./Dockerfile
